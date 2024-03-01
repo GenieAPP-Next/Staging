@@ -23,7 +23,7 @@ const Bills = sequelize.define("bills", {
     unique: false,
   },
   status: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     unique: false,
   },
