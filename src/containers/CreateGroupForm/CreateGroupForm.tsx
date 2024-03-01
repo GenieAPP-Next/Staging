@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 const CreateGroupForm: React.FC = () => {
   const [name, setName] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(dayjs());
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
     setSelectedDate(date);

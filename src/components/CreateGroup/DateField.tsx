@@ -4,6 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { TextField } from '@mui/material';
 
 dayjs.extend(customParseFormat);
 
@@ -13,17 +14,22 @@ interface DateFieldProps {
 }
 
 const DateField: React.FC<DateFieldProps> = ({ selectedDate, onDateChange }) => {
-  const handleChange = (date: dayjs.Dayjs | null) => {
-    onDateChange(date);
-  };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         label="Event Date"
         value={selectedDate}
-        onChange={handleChange}
+        onChange={onDateChange}
         minDate={dayjs()}
+        slots={{
+          textField: (textFieldProps) => (
+            <TextField 
+              {...textFieldProps} 
+              aria-label="Event Date" 
+              placeholder={!selectedDate ? '' : 'MM/DD/YYYY'}
+            />
+          )
+        }}
       />
     </LocalizationProvider>
   );
