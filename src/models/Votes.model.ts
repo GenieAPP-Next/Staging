@@ -3,37 +3,35 @@ import { DataTypes } from "sequelize";
 import sequelize from "@/server-action/middlewares/dbConnection";
 
 import Users from "./Users.model";
+import Gifts from "./Gifts.model";
 
-const Groups = sequelize.define("groups", {
-  groups_id: {
+const Votes = sequelize.define("votes", {
+  vote_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
-  name: {
-    type: DataTypes.STRING,
+  gift_id: {
+    type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
   },
-  category: {
-    type: DataTypes.STRING,
+  user_id: {
+    type: DataTypes.INTEGER,
     allowNull: false,
     unique: false,
   },
-  event_date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  creator_user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
 });
 
-Groups.belongsTo(Users, {
-  foreignKey: "creator_user_id",
+Votes.belongsTo(Users, {
+  foreignKey: "user_id",
   targetKey: "user_id",
 });
 
-export default Groups;
+Votes.belongsTo(Gifts, {
+  foreignKey: "gift_id",
+  targetKey: "gift_id",
+});
+
+export default Votes;

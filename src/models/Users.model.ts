@@ -2,8 +2,8 @@ import { DataTypes } from "sequelize";
 
 import sequelize from "@/server-action/middlewares/dbConnection";
 
-const Users = sequelize.define("Users", {
-  users_id: {
+const Users = sequelize.define("users", {
+  user_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
