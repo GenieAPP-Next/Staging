@@ -2,9 +2,9 @@ import { DataTypes } from "sequelize";
 
 import sequelize from "@/server-action/middlewares/dbConnection";
 
-import Users from './Users.model';
+import Users from "./Users.model";
 
-const Groups = sequelize.define('Users', {
+const Groups = sequelize.define("groups", {
   groups_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -35,8 +35,8 @@ const Groups = sequelize.define('Users', {
 });
 
 Groups.belongsTo(Users, {
-  foreignKey: 'creator_user_id',
-  targetKey: 'users_id',
+  foreignKey: "creator_user_id",
+  targetKey: "users_id",
 });
 
 export default Groups;
