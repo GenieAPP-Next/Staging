@@ -16,14 +16,11 @@ const GroupMembers = sequelize.define("group_members", {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   role: {
     type: DataTypes.STRING,

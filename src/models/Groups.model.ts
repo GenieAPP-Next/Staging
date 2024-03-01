@@ -15,14 +15,11 @@ const Groups = sequelize.define("groups", {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
   category: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   event_date: {
     type: DataTypes.DATE,

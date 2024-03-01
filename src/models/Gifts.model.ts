@@ -16,14 +16,11 @@ const Gifts = sequelize.define("gifts", {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   price: {
     type: DataTypes.NUMBER,

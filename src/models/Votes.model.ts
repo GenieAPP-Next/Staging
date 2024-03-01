@@ -16,14 +16,11 @@ const Votes = sequelize.define("votes", {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
 });
 

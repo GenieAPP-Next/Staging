@@ -14,15 +14,12 @@ const SharedLinks = sequelize.define("shared_links", {
   group_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
+    unique: false,
   },
   shared_with: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
   link_type: {
     type: DataTypes.STRING,
