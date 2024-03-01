@@ -1,9 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { Box, Stack } from '@mui/material';
-import NameField from './NameField';
-import CategoryDropdown from './CategoryDropdown';
-import DateField from './DateField';
+import NameField from '@/components/CreateGroup/NameField';
+import CategoryDropdown from '@/components/CreateGroup/CategoryDropdown';
+import DateField from '@/components/CreateGroup/DateField';
 import dayjs from 'dayjs';
 // import MembersField from './MembersField';
 // import CreateButton from './CreateButton';

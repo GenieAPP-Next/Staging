@@ -1,4 +1,4 @@
-import DashboardData from '@/components/DashboardData/DashboardData';
+import DashboardData from '@/containers/DashboardData/DashboardData';
 import Navbar from '@/components/Navbar/Navbar';
 import React from 'react';
 
