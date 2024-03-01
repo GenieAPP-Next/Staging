@@ -36,7 +36,7 @@ const Groups = sequelize.define("groups", {
 
 Groups.belongsTo(Users, {
   foreignKey: "creator_user_id",
-  targetKey: "users_id",
+  targetKey: "user_id",
 });
 
 export default Groups;

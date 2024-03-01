@@ -3,7 +3,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "@/server-action/middlewares/dbConnection";
 
 const Users = sequelize.define("users", {
-  users_id: {
+  user_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
