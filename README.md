@@ -9,7 +9,7 @@
 ```json
 {
     "name": "examplename",
-    "category": "examplecategory,
+    "category": "examplecategory",
     "eventDate": "2024-03-02",
     "creatorUserId": 1
 }
