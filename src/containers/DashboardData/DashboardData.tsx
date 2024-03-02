@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import AddButton from '@/components/Button/AddButton/AddButton';
 import GroupCard from '@/components/CreateGroup/GroupCard';
+import styles from './DashboardData.module.scss';
 
 const DashboardData = () => {
   // Predefined avatar colors
@@ -40,37 +41,28 @@ const DashboardData = () => {
   );
 
   const renderNoGroupContent = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        textAlign: 'center',
-        gap: 2,
-        pt: 8,
-      }}
-    >
+    <div className={styles.dashboardWrapper}>
+    <Box className={styles.noGroupContent}>
       <Box
         component="img"
         src="/nodata.svg"
         alt="No Data"
-        sx={{ maxWidth: '10%', height: 'auto' }}
+        className={styles.noGroupImage}
       />
-      <Box sx={{mt: 10}}>
-        <Typography variant="h6" sx={{ color: "#48464C" }}>
+      <Box className={styles.noGroupText}>
+        <Typography variant="h6" className={styles.textH6}>
           Group Not Found
         </Typography>
-        <Typography sx={{ color: "#48464C" }}>
+        <Typography className={styles.textRegular}>
           Please create or join a group to start creating a split bill
         </Typography>
       </Box>
     </Box>
+    </div>
   );
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{padding:3}}>
       {groups.length > 0 ? renderGroups() : renderNoGroupContent()}
       <AddButton />
     </Box>

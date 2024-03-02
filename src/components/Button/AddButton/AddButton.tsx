@@ -8,7 +8,7 @@ const AddButton = () => {
   const router = useRouter();
 
   const handleAddClick = () => {
-    router.push('/creategroup');
+    router.push('/group/create');
   };
 
   return (
