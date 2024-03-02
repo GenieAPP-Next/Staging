@@ -2,14 +2,15 @@
 
 ## Routes
 
-### Register
+### CreateGroup
 
-- /api/auth/register
+- /api/createGroup
 
 ```json
 {
-  "username": "example",
-  "email": "example@email.com",
-  "password": "example123"
+    "name": "examplename",
+    "category": "examplecategory,
+    "eventDate": "2024-03-02",
+    "creatorUserId": 1
 }
 ```
