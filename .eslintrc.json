@@ -23,6 +23,7 @@
     "react/prop-types": "off",
     "react/no-unescaped-entities": "off",
     "object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/strict-boolean-expressions": "off",
     "jsx-a11y/anchor-is-valid": [
       "off",
       {
