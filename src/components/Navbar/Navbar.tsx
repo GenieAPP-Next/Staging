@@ -1,11 +1,22 @@
-'use client';
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText, ListItemButton, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import QrCodeIcon from '@mui/icons-material/QrCode';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+"use client";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemButton,
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import QrCodeIcon from "@mui/icons-material/QrCode";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 
 interface NavbarProps {
   pageTitle: string;
@@ -24,7 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ pageTitle }) => {
     appRouter.back();
   };
 
-  const isHome = pathname === '/'; // Check if it's the homepage using pathname
+  const isHome = pathname === "/group";
 
   return (
     <Box sx={{ flexGrow: 1 }}>
