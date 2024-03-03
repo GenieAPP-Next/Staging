@@ -32,6 +32,7 @@ export default function AddMember({ memberList }: Props) {
           <MemberSearchInput memberList={memberList} onSelectMember={handleSelectMember} />
           <div className={classes.wrapper}>
             <AddMemberLogistics selectedMembers={selectedMembers} onDeleteMember={handleDeleteMember} />
+
           </div>
         </div>
         <SubmitAddedMembers />

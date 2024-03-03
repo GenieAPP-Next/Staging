@@ -27,4 +27,32 @@ const memberDummy = [
     name: "Fitri",
     status: "available",
   },
+  {
+    name: "Nur",
+    status: "available",
+  },
+  {
+    name: "Ricky",
+    status: "available",
+  },
+  {
+    name: "Rizky",
+    status: "available",
+  },
+  {
+    name: "Nisa",
+    status: "available",
+  },
+  {
+    name: "Ihsan",
+    status: "available",
+  },
+  {
+    name: "Asep",
+    status: "available",
+  },
+  {
+    name: "Udin",
+    status: "available",
+  },
 ];
