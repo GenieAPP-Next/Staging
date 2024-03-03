@@ -5,13 +5,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { TextField } from "@mui/material";
+import { DateFieldProps } from "./type";
 
 dayjs.extend(customParseFormat);
-
-interface DateFieldProps {
-  selectedDate: dayjs.Dayjs | null;
-  onDateChange: (date: dayjs.Dayjs | null) => void;
-}
 
 const DateField: React.FC<DateFieldProps> = ({
   selectedDate,
