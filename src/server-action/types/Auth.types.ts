@@ -4,4 +4,9 @@ interface RegisterInput {
   password: string;
 }
 
-export type { RegisterInput };
+interface LoginInput {
+    email: string;
+    password: string;
+}
+
+export type { RegisterInput, LoginInput };
