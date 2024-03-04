@@ -2,7 +2,6 @@ import { DataTypes } from "sequelize";
 
 import sequelize from "@/server-action/middlewares/dbConnection";
 
-import Users from "./Users.model";
 import Gifts from "./Gifts.model";
 
 const Bills = sequelize.define("bills", {
