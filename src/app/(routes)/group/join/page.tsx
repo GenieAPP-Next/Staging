@@ -3,7 +3,7 @@
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/material/styles";
 import Navbar from "@/components/Navbar/Navbar";
-import JoinGroupInput from "@/components/JoinGroupInput";
+import JoinGroupForm from "@/containers/JoinGroupForm/JoinGroupForm";
 import styles from "@/app/(routes)/group/join/page.module.css";
 
 const JoinGroup = () => {
@@ -20,7 +20,7 @@ const JoinGroup = () => {
         <Typography sx={{ fontSize: 24, fontWeight: 500, marginBottom: "32px", color: theme.palette.text.primary }}>
           Enter Group Code
         </Typography>
-        <JoinGroupInput onJoin={handleJoin} />
+        <JoinGroupForm onJoin={handleJoin} />
       </div>
     </>
   );
