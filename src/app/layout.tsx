@@ -15,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <AppRouterCacheProvider>
-        <ThemeProvider theme={theme}>
+    <AppRouterCacheProvider>
+      <ThemeProvider theme={theme}>
+        <html lang='en'>
           <body>{children}</body>
-        </ThemeProvider>
-      </AppRouterCacheProvider>
-    </html>
+        </html>
+      </ThemeProvider>
+    </AppRouterCacheProvider>
   );
 }
