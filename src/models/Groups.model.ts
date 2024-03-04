@@ -5,7 +5,7 @@ import sequelize from "@/server-action/middlewares/dbConnection";
 import Users from "./Users.model";
 
 const Groups = sequelize.define("groups", {
-  groups_id: {
+  group_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
