@@ -1,13 +1,11 @@
 import { useState, useRef } from "react";
-import TextField from "@mui/material/TextField";
+import { useTheme } from "@mui/material/styles";
+import { TextField, Typography } from "@mui/material/";
 import ValidationText from "@/components/ValidationText/ValidationText";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
 
-interface JoinGroupFormProps {
-  onJoin: (code: string) => void;
-}
-
-const JoinGroupForm: React.FC<JoinGroupFormProps> = ({ onJoin }) => {
+const JoinGroupForm = () => {
+  const theme = useTheme();
   const [codes, setCodes] = useState<string[]>(["", "", "", ""]);
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const [errors, setErrors] = useState<string>("");
@@ -32,8 +30,10 @@ const JoinGroupForm: React.FC<JoinGroupFormProps> = ({ onJoin }) => {
   const handleSubmit = () => {
     const code = codes.join("");
     if (validateCodes(code)) {
-      onJoin(code);
+      console.log("Code submitted :" + code);
     }
+
+    // handle submit operation here
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -61,6 +61,9 @@ const JoinGroupForm: React.FC<JoinGroupFormProps> = ({ onJoin }) => {
 
   return (
     <>
+      <Typography sx={{ fontSize: 24, fontWeight: 500, marginBottom: "32px", color: theme.palette.text.primary }}>
+        Enter Group Code
+      </Typography>
       <div style={{ display: "block", marginBottom: "30px" }}>
         {codes.map((code, index) => (
           <TextField
