@@ -1,17 +1,28 @@
 "use client";
-import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import React from "react";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
+import { CategoryDropdownProps } from "./type";
 
-interface CategoryDropdownProps {
-  selectedCategory: string;
-  onSelectCategory: (category: string) => void;
-}
+const categories = [
+  "Birthday",
+  "Wedding",
+  "Anniversary",
+  "Baby Shower",
+  "Others",
+];
 
-const categories = ['Birthday', 'Wedding', 'Anniversary', 'Baby Shower', 'Others'];
-
-const CategoryDropdown: React.FC<CategoryDropdownProps> = ({ selectedCategory, onSelectCategory }) => {
+const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
+  selectedCategory,
+  onSelectCategory,
+}) => {
   const handleCategoryChange = (event: SelectChangeEvent) => {
-    onSelectCategory(event.target.value as string);
+    onSelectCategory(event.target.value);
   };
 
   return (

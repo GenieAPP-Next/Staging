@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import ShowCodeModal from "../ShowCodeModal/ShowCodeModal";
 
+
 interface NavbarProps {
   pageTitle: string;
   content?: string;
@@ -47,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ pageTitle, content }) => {
     appRouter.back();
   };
 
-  const isHome = pathname === "/"; // Check if it's the homepage using pathname
+  const isHome = pathname === "/group";
 
   return (
     <>

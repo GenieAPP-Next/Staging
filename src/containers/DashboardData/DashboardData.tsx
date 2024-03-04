@@ -3,20 +3,12 @@ import { Box, Typography } from "@mui/material";
 import AddButton from "@/components/Button/AddButton/AddButton";
 import GroupCard from "@/components/CreateGroup/GroupCard";
 import styles from "./DashboardData.module.scss";
+import {
+  avatarColors,
+  getColorIndex,
+} from "@/components/utils/avatarColorsUtils";
 
 const DashboardData = () => {
-  // Predefined avatar colors
-  const avatarColors = ["#FFC107", "#FF5722", "#673AB7", "#4CAF50", "#2196F3"];
-
-  // Function to get a color index based on group name
-  const getColorIndex = (str: string, arrayLength: number) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = (hash + str.charCodeAt(i)) % arrayLength;
-    }
-    return hash;
-  };
-
   // Example groups data
   const groups = [
     {
