@@ -46,7 +46,7 @@ const DashboardData = () => {
       <Box className={styles.noGroupContent}>
         <Box
           component="img"
-          src="/nodata.svg"
+          src="/img/empty-data.jpeg"
           alt="No Data"
           className={styles.noGroupImage}
         />

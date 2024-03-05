@@ -12,33 +12,7 @@
     }
 
     .noGroupImage {
-
-        max-width: 40%;
-
-
-        @media (min-width: 320px) {
-            max-width: 40%;
-        }
-
-
-        @media (min-width: 375px) {
-            max-width: 40%;
-        }
-
-
-        @media (min-width: 425px) {
-            max-width: 40vw;
-        }
-
-
-        @media (min-width: 768px) {
-            max-width: 20vw;
-        }
-
-
-        @media (min-width: 1024px) {
-            max-width: 20vw;
-        }
+        max-width: 90%;
     }
 
 
