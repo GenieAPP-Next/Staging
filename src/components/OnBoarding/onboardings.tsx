@@ -14,12 +14,12 @@ export default function OnBoardings() {
     if (currentIndex < onboardings.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.push("/group");
+      router.push("/login");
     }
   };
 
   const handleSkip = () => {
-    router.push("/group");
+    router.push("/login");
   };
 
   return (
