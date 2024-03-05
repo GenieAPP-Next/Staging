@@ -24,6 +24,7 @@ const DateField: React.FC<DateFieldProps> = ({
         slots={{
           textField: (textFieldProps) => (
             <TextField
+              size="small"
               {...textFieldProps}
               aria-label="Event Date"
               placeholder={!selectedDate ? "" : "YYYY/MM/DD/"}

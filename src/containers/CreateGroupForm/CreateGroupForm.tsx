@@ -69,48 +69,35 @@ const CreateGroupForm: React.FC = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "80vh",
-        padding: "20px",
-      }}
-    >
-      <Stack spacing={2} sx={{ mb: "auto" }}>
-        <NameField name={name} onNameChange={setName} />
-        <CategoryDropdown
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-        <DateField
-          selectedDate={selectedDate}
-          onDateChange={handleDateChange}
-        />
-        <AddMember onAddMember={handleAddMember} />
-        <MemberList
-          members={memberList}
-          selectedBillPayerId={selectedBillPayerId}
-          onSelectBillPayer={handleSelectBillPayer}
-        />
-      </Stack>
+    <main>
       <Box
         sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          p: "20px",
-          bgcolor: "background.paper",
+          display: "flex",
+          flexDirection: "column",
+          height: "93.5vh",
+          padding: "20px",
         }}
       >
-        <CreateButton
-          onCreate={handleCreate}
-          disabled={!isFormComplete}
-          fullWidth
-        />
+        <Stack spacing={2} sx={{ mb: "auto" }}>
+          <NameField name={name} onNameChange={setName} />
+          <CategoryDropdown
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+          <DateField
+            selectedDate={selectedDate}
+            onDateChange={handleDateChange}
+          />
+          <AddMember onAddMember={handleAddMember} />
+          <MemberList
+            members={memberList}
+            selectedBillPayerId={selectedBillPayerId}
+            onSelectBillPayer={handleSelectBillPayer}
+          />
+        </Stack>
+        <CreateButton onCreate={handleCreate} disabled={!isFormComplete} />
       </Box>
-    </Box>
+    </main>
   );
 };
 
