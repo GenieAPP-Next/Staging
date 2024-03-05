@@ -4,6 +4,7 @@ import sequelize from "@/server-action/middlewares/dbConnection";
 
 import Groups from "./Groups.model";
 import Users from "./Users.model";
+import Categories from "./Categories.model";
 
 const Gifts = sequelize.define("gifts", {
   gift_id: {
@@ -34,12 +35,12 @@ const Gifts = sequelize.define("gifts", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  added_by_user_id: {
+  user_id: {
     type: DataTypes.NUMBER,
     allowNull: false,
   },
-  gift_category: {
-    type: DataTypes.STRING,
+  categories_id: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
@@ -50,8 +51,13 @@ Gifts.belongsTo(Groups, {
 });
 
 Gifts.belongsTo(Users, {
-  foreignKey: "added_by_user_id",
+  foreignKey: "user_id",
   targetKey: "user_id",
+});
+
+Gifts.belongsTo(Categories, {
+  foreignKey: "categories_id",
+  targetKey: "categories_id",
 });
 
 export default Gifts;
