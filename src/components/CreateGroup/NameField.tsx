@@ -8,6 +8,7 @@ const NameField: React.FC<NameFieldProps> = ({ name, onNameChange }) => {
       fullWidth
       label="Name"
       value={name}
+      size="small"
       onChange={(e) => {
         onNameChange(e.target.value);
       }}

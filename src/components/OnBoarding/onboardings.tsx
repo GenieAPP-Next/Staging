@@ -23,16 +23,18 @@ export default function OnBoardings() {
   };
 
   return (
-    <section id="onboardings">
-      <div className={classes.container}>
-        <div className={classes.content}>
-          <OnboardingItem {...onboardings[currentIndex]} />
+    <main>
+      <section id="onboardings">
+        <div className={classes.container}>
+          <div className={classes.content}>
+            <OnboardingItem {...onboardings[currentIndex]} />
+          </div>
+          <div className={classes.aLayout}>
+            <a onClick={handleSkip}>Skip</a>
+            <a onClick={handleNext}>Next</a>
+          </div>
         </div>
-        <div className={classes.aLayout}>
-          <a onClick={handleSkip}>Skip</a>
-          <a onClick={handleNext}>Next</a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
   );
 }
