@@ -129,7 +129,7 @@ function LoginForm() {
             onSubmit={handleSubmit(onSubmit)}
             sx={{
               width: "100%",
-              maxWidth: "300px",
+              maxWidth: "325px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
