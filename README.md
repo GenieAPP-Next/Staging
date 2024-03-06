@@ -2,15 +2,41 @@
 
 ## Routes
 
-### CreateGroup
+### Register
 
-- /api/createGroup
+- /api/auth/register
 
 ```json
 {
-    "name": "examplename",
-    "category": "examplecategory",
-    "eventDate": "2024-03-02",
-    "creatorUserId": 1
+  "username": "example",
+  "email": "example@email.com",
+  "password": "example123"
 }
 ```
+### Creategroup
+
+- [POST] /api/createGroup
+
+```json
+{
+    "name": "example-name-group",
+    "category": "example-category",
+    "eventDate": "example-eventData",
+    "creatorUserId": 4
+}
+```
+### Addmember
+- [POST] /api/addMember
+
+```json
+{
+    "groupId": 7,
+    "userId": 5,
+    "role": "example-role"
+}
+```
+### findMember
+- [GET] /api/findMember/:username
+
+### listMember
+- [GET] /api/listMember/:groupid
