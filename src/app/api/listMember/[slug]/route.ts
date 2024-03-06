@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+// import { NextApiRequest, NextApiResponse } from "next";
 import { listMember } from "@/server-action/controllers/Showlistmember.controllers";
-export async function GET(req: NextRequest, res: NextResponse, { params }:{params:{slug:number}}) {
-  return await listMember(req, res, params.slug);
+export async function GET(request: any, { params }: any) {
+  return await listMember(Number(params.slug));
 }
