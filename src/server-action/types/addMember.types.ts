@@ -1,3 +1,8 @@
 export interface addMember {
-    username: string;
+    groupId: number;
+    userId: number;
+    role: string;
+}
+export interface showlistmember {
+    groupId: number;
 }

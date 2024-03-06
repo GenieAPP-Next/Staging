@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validationResult } from "express-validator";
-import { addUsernameService } from "../services/Addusername.service";
-export const Addmember = async (
+import { createGroupService } from "../services/Creategroup.service";
+import { Listmembergroup } from "../repository/showlistmember";
+export const Creategroup = async (
   req: NextRequest,
   res: NextResponse,
 ) => {
@@ -17,17 +18,25 @@ export const Addmember = async (
           { status: 400 }
         );
       }
-      const { groupId, userId, role } = body;
-      const addMemberGroup = await addUsernameService({
+      const { name, category, eventDate, creatorUserId } = body;
+      const newGroup = await createGroupService({
+        name,
+        category,
+        eventDate,
+        creatorUserId,
+      });
+      const groupId = newGroup.data.Id;
+      const showListMember = await Listmembergroup({
         groupId,
-        userId,
-        role,
       });
       return NextResponse.json(
         {
           success: true,
-          message: "Success Finding username",
-          data: addMemberGroup,
+          message: "Create Group successfully",
+          data: {
+            newGroup,
+            members: showListMember,
+          },
         },
         { status: 200 }
       );
