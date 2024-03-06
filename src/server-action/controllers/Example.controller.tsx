@@ -1,7 +1,16 @@
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 
-const Example = () => {
-  return NextResponse.json({ message: "Hello World" }, { status: 200 });
-};
+// const Example = () => {
+//   return NextResponse.json({ message: "Hello World" }, { status: 200 });
+// };
 
-export { Example };
+// export { Example };
+
+const inputTesting= ({params}: { params: {slug: string}}) => { 
+  const usernameInput = params.slug
+    return(
+        usernameInput
+    )
+}
+
+export default inputTesting

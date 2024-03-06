@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validationResult } from "express-validator";
-import { addUsernameService } from "../services/Addusername.service";
-export const Addmember = async (
+import { searchUserNameService } from "../services/Findusername.service";
+export const Findmember = async (
   req: NextRequest,
   res: NextResponse,
 ) => {
-  if (req.method === "POST") {
-    const body = await req.json();
+  if (req.method === "GET") {
     try {
+      
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return NextResponse.json(
@@ -17,26 +17,24 @@ export const Addmember = async (
           { status: 400 }
         );
       }
-      const { groupId, userId, role } = body;
-      const addMemberGroup = await addUsernameService({
-        groupId,
-        userId,
-        role,
+
+      const findUsername = await searchUserNameService({
+        username: usernameInput,
       });
       return NextResponse.json(
         {
           success: true,
           message: "Success Finding username",
-          data: addMemberGroup,
+          data: findUsername,
         },
         { status: 200 }
       );
-    } catch (err: any) {
-      console.error("Error create group:", err);
+    } catch (error: any) {
+      console.error("Error finding username:", error);
       return NextResponse.json(
         {
           success: false,
-          message: err.message,
+          message: error.message,
         },
         { status: 400 }
       );
