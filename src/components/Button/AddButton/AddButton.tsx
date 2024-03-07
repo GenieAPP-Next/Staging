@@ -1,23 +1,18 @@
-'use client';
-import React from 'react';
-import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { useRouter } from 'next/navigation';
+"use client";
+import React from "react";
+import { Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useRouter } from "next/navigation";
 
 const AddButton = () => {
   const router = useRouter();
 
   const handleAddClick = () => {
-    router.push('/group/create');
+    router.push("/group/create");
   };
 
   return (
-    <Fab
-      color="primary"
-      aria-label="add"
-      sx={{ position: 'fixed', bottom: 16, right: 16 }}
-      onClick={handleAddClick}
-    >
+    <Fab color="primary" aria-label="add" onClick={handleAddClick}>
       <AddIcon />
     </Fab>
   );

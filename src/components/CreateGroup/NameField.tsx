@@ -1,10 +1,6 @@
-import React from 'react';
-import { TextField } from '@mui/material';
-
-interface NameFieldProps {
-  name: string;
-  onNameChange: (name: string) => void;
-}
+import React from "react";
+import { TextField } from "@mui/material";
+import { NameFieldProps } from "./type";
 
 const NameField: React.FC<NameFieldProps> = ({ name, onNameChange }) => {
   return (
@@ -12,7 +8,10 @@ const NameField: React.FC<NameFieldProps> = ({ name, onNameChange }) => {
       fullWidth
       label="Name"
       value={name}
-      onChange={(e) => onNameChange(e.target.value)}
+      size="small"
+      onChange={(e) => {
+        onNameChange(e.target.value);
+      }}
       variant="outlined"
     />
   );

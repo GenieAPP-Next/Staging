@@ -1,0 +1,92 @@
+.container {
+  min-height: 93.5vh;
+  max-width: 1152px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  padding: 0.2rem 1rem 1rem 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1.5rem 1rem 1.5rem;
+  }
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+  color: #48464c;
+  font-weight: 500;
+  position: relative;
+  cursor: default;
+  overflow: hidden;
+
+  h1 {
+    font-size: 24px;
+    letter-spacing: 0.15px;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  p {
+    margin-top: 0.5rem;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    line-height: 16px;
+    text-align: center;
+  }
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+
+  button {
+    letter-spacing: 0.15px;
+    line-height: 20px;
+    font-size: 15px;
+    background: #4285f4;
+    border-radius: 1rem;
+    border: none;
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1);
+    padding: 10px 24px 10px 24px;
+    color: #fff;
+    width: 500px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.8;
+    transition: ease-in-out;
+    transition-duration: 150ms;
+  }
+}
+
+.searchLayout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.searchContainer {
+  width: 500px;
+  padding-top: 0.5rem;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
