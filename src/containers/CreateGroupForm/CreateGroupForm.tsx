@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Snackbar, Alert, LinearProgress } from "@mui/material";
 import NameField from "@/components/CreateGroup/NameField";
 import CategoryDropdown from "@/components/CreateGroup/CategoryDropdown";
 import DateField from "@/components/CreateGroup/DateField";
@@ -19,6 +20,10 @@ const CreateGroupForm: React.FC = () => {
   const [selectedBillPayerId, setSelectedBillPayerId] = useState<string | null>(
     null
   );
+  const [isBillPayerSelected, setIsBillPayerSelected] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dummyMembers = [
     { id: "7", name: "Alice Wonderland" },
@@ -33,7 +38,8 @@ const CreateGroupForm: React.FC = () => {
     name !== "" &&
     selectedCategory !== "" &&
     selectedDate !== null &&
-    memberList.length > 0;
+    memberList.length > 0 &&
+    selectedBillPayerId !== null;
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
     setSelectedDate(date);
@@ -50,11 +56,20 @@ const CreateGroupForm: React.FC = () => {
   const handleAddMember = () => {
     router.push("/group/add-member");
   };
+
   const handleSelectBillPayer = (id: string) => {
     setSelectedBillPayerId(id);
+    setIsBillPayerSelected(true);
   };
 
   const handleCreate = async () => {
+    if (!isBillPayerSelected) {
+      setSnackbarOpen(true);
+      return;
+    }
+
+    setIsLoading(true);
+
     const userId = "7"; // get from user session
     const formattedDate = selectedDate
       ? selectedDate.format("YYYY-MM-DD")
@@ -67,50 +82,37 @@ const CreateGroupForm: React.FC = () => {
       creatorUserId: userId,
     };
 
-    console.log("Creating group with data:", groupData);
-
     try {
-      // Start creating group
       const createGroupResponse = await axios.post(
         "/api/createGroup",
         groupData
       );
-
       const groupId =
         createGroupResponse.data.data.newGroup.data.NewGroup.group_id;
 
-      console.log("Group created, groupId:", groupId);
-
-      // Ensure groupId is available
       if (!groupId) {
         console.error("Error: Group ID is undefined or null.");
+        setIsLoading(false);
         return;
       }
 
-      // Add members to group with appropriate roles
       for (const member of memberList) {
-        // Determine if the current member is the bill payer
         const role = member.id === selectedBillPayerId ? "billPayer" : "member";
-
-        console.log(
-          `Adding member ${member.id} to group ${groupId} with role ${role}`
-        );
-        const addMemberResponse = await axios.post("/api/addMember", {
+        await axios.post("/api/addMember", {
           groupId,
           userId: member.id,
           role,
         });
-        console.log(
-          `Member ${member.id} added with role ${role}, response:`,
-          addMemberResponse.data
-        );
       }
 
-      // Optional: Navigate to the group page or update the UI after all members have been added
-      // router.push(`/group/${groupId}`);
+      setSuccessSnackbarOpen(true);
+      setTimeout(() => {
+        void router.push(`/${name}/gift`);
+      }, 1500);
     } catch (error) {
       console.error("Error creating group or adding members:", error);
-      // Display error in UI or handle error differently
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,6 +126,11 @@ const CreateGroupForm: React.FC = () => {
           padding: "20px",
         }}
       >
+        {isLoading && (
+          <Box sx={{ width: "100%", my: 2 }}>
+            <LinearProgress />
+          </Box>
+        )}
         <Stack spacing={2} sx={{ mb: "auto" }}>
           <NameField name={name} onNameChange={setName} />
           <CategoryDropdown
@@ -141,6 +148,45 @@ const CreateGroupForm: React.FC = () => {
             onSelectBillPayer={handleSelectBillPayer}
           />
         </Stack>
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => {
+            setSnackbarOpen(false);
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => {
+              setSnackbarOpen(false);
+            }}
+            severity="warning"
+            sx={{ width: "100%" }}
+          >
+            Please select a bill payer.
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={successSnackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => {
+            setSuccessSnackbarOpen(false);
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => {
+              setSuccessSnackbarOpen(false);
+            }}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Group created successfully!
+          </Alert>
+        </Snackbar>
+
         <CreateButton onCreate={handleCreate} disabled={!isFormComplete} />
       </Box>
     </main>

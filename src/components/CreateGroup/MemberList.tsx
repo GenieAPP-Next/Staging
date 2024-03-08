@@ -33,13 +33,14 @@ export const MemberList: React.FC<MemberListProps> = ({
       <List>
         {members.map((member) => {
           const colorIndex = getColorIndex(member.name, avatarColors.length);
+          const isBillPayerSelected = selectedBillPayerId === member.id;
           return (
             <ListItem
               sx={{ borderBottom: "1px solid grey" }}
               key={member.id}
               secondaryAction={
                 <Radio
-                  checked={selectedBillPayerId === member.id}
+                  checked={isBillPayerSelected}
                   onChange={() => {
                     onSelectBillPayer(member.id);
                   }}
@@ -47,8 +48,7 @@ export const MemberList: React.FC<MemberListProps> = ({
                   name="radio-buttons"
                   inputProps={{ "aria-label": member.id }}
                   sx={{
-                    color:
-                      selectedBillPayerId === member.id ? "purple" : "default",
+                    color: isBillPayerSelected ? "purple" : "default",
                     "&.Mui-checked": {
                       color: "purple",
                     },
