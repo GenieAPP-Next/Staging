@@ -14,25 +14,27 @@ export default function OnBoardings() {
     if (currentIndex < onboardings.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      router.push("/group");
+      router.push("/login");
     }
   };
 
   const handleSkip = () => {
-    router.push("/group");
+    router.push("/login");
   };
 
   return (
-    <section id="onboardings">
-      <div className={classes.container}>
-        <div className={classes.content}>
-          <OnboardingItem {...onboardings[currentIndex]} />
+    <main>
+      <section id="onboardings">
+        <div className={classes.container}>
+          <div className={classes.content}>
+            <OnboardingItem {...onboardings[currentIndex]} />
+          </div>
+          <div className={classes.aLayout}>
+            <a onClick={handleSkip}>Skip</a>
+            <a onClick={handleNext}>Next</a>
+          </div>
         </div>
-        <div className={classes.aLayout}>
-          <a onClick={handleSkip}>Skip</a>
-          <a onClick={handleNext}>Next</a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
   );
 }

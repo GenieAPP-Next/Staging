@@ -3,20 +3,12 @@ import { Box, Typography } from "@mui/material";
 import AddButton from "@/components/Button/AddButton/AddButton";
 import GroupCard from "@/components/CreateGroup/GroupCard";
 import styles from "./DashboardData.module.scss";
+import {
+  avatarColors,
+  getColorIndex,
+} from "@/components/utils/avatarColorsUtils";
 
 const DashboardData = () => {
-  // Predefined avatar colors
-  const avatarColors = ["#FFC107", "#FF5722", "#673AB7", "#4CAF50", "#2196F3"];
-
-  // Function to get a color index based on group name
-  const getColorIndex = (str: string, arrayLength: number) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = (hash + str.charCodeAt(i)) % arrayLength;
-    }
-    return hash;
-  };
-
   // Example groups data
   const groups = [
     {
@@ -54,7 +46,7 @@ const DashboardData = () => {
       <Box className={styles.noGroupContent}>
         <Box
           component="img"
-          src="/nodata.svg"
+          src="/img/empty-data.jpeg"
           alt="No Data"
           className={styles.noGroupImage}
         />
@@ -71,9 +63,19 @@ const DashboardData = () => {
   );
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3, height: "93.5vh", position: "relative" }}>
+      {" "}
       {groups.length > 0 ? renderGroups() : renderNoGroupContent()}
-      <AddButton />
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          maxWidth: "400px",
+        }}
+      >
+        <AddButton />
+      </Box>
     </Box>
   );
 };
