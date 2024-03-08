@@ -46,7 +46,7 @@ const DashboardData = () => {
       <Box className={styles.noGroupContent}>
         <Box
           component="img"
-          src="/nodata.svg"
+          src="/img/empty-data.jpeg"
           alt="No Data"
           className={styles.noGroupImage}
         />
@@ -63,9 +63,19 @@ const DashboardData = () => {
   );
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3, height: "93.5vh", position: "relative" }}>
+      {" "}
       {groups.length > 0 ? renderGroups() : renderNoGroupContent()}
-      <AddButton />
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          maxWidth: "400px",
+        }}
+      >
+        <AddButton />
+      </Box>
     </Box>
   );
 };

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Snackbar, Alert, LinearProgress } from "@mui/material";
 import NameField from "@/components/CreateGroup/NameField";
 import CategoryDropdown from "@/components/CreateGroup/CategoryDropdown";
 import DateField from "@/components/CreateGroup/DateField";
@@ -9,6 +11,7 @@ import { MemberList } from "@/components/CreateGroup/MemberList";
 import AddMember from "@/components/CreateGroup/AddMember";
 import { CreateButton } from "@/components/Button/CreateButton/CreateButton";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const CreateGroupForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -17,11 +20,15 @@ const CreateGroupForm: React.FC = () => {
   const [selectedBillPayerId, setSelectedBillPayerId] = useState<string | null>(
     null
   );
+  const [isBillPayerSelected, setIsBillPayerSelected] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dummyMembers = [
-    { id: "1", name: "Alice Wonderland" },
+    { id: "7", name: "Alice Wonderland" },
     { id: "2", name: "Bob" },
-    { id: "3", name: "Charlie" },
+    // { id: "3", name: "Charlie" },
     //  dummy data
   ];
 
@@ -31,7 +38,8 @@ const CreateGroupForm: React.FC = () => {
     name !== "" &&
     selectedCategory !== "" &&
     selectedDate !== null &&
-    memberList.length > 0;
+    memberList.length > 0 &&
+    selectedBillPayerId !== null;
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
     setSelectedDate(date);
@@ -48,69 +56,140 @@ const CreateGroupForm: React.FC = () => {
   const handleAddMember = () => {
     router.push("/group/add-member");
   };
+
   const handleSelectBillPayer = (id: string) => {
     setSelectedBillPayerId(id);
+    setIsBillPayerSelected(true);
   };
 
-  const handleCreate = () => {
-    // Logic to create a group
-    const userId = "someUserId";
+  const handleCreate = async () => {
+    if (!isBillPayerSelected) {
+      setSnackbarOpen(true);
+      return;
+    }
+
+    setIsLoading(true);
+
+    const userId = "7"; // get from user session
     const formattedDate = selectedDate
       ? selectedDate.format("YYYY-MM-DD")
       : null;
-    console.log("Create group with:", {
+
+    const groupData = {
       name,
-      selectedCategory,
-      selectedDate: formattedDate,
-      memberList,
-      billPayerId: selectedBillPayerId,
-      createdBy: userId,
-    });
+      category: selectedCategory,
+      eventDate: formattedDate,
+      creatorUserId: userId,
+    };
+
+    try {
+      const createGroupResponse = await axios.post(
+        "/api/createGroup",
+        groupData
+      );
+      const groupId =
+        createGroupResponse.data.data.newGroup.data.NewGroup.group_id;
+
+      if (!groupId) {
+        console.error("Error: Group ID is undefined or null.");
+        setIsLoading(false);
+        return;
+      }
+
+      for (const member of memberList) {
+        const role = member.id === selectedBillPayerId ? "billPayer" : "member";
+        await axios.post("/api/addMember", {
+          groupId,
+          userId: member.id,
+          role,
+        });
+      }
+
+      setSuccessSnackbarOpen(true);
+      setTimeout(() => {
+        void router.push(`/${name}/gift`);
+      }, 1500);
+    } catch (error) {
+      console.error("Error creating group or adding members:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "80vh",
-        padding: "20px",
-      }}
-    >
-      <Stack spacing={2} sx={{ mb: "auto" }}>
-        <NameField name={name} onNameChange={setName} />
-        <CategoryDropdown
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-        <DateField
-          selectedDate={selectedDate}
-          onDateChange={handleDateChange}
-        />
-        <AddMember onAddMember={handleAddMember} />
-        <MemberList
-          members={memberList}
-          selectedBillPayerId={selectedBillPayerId}
-          onSelectBillPayer={handleSelectBillPayer}
-        />
-      </Stack>
+    <main>
       <Box
         sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          p: "20px",
-          bgcolor: "background.paper",
+          display: "flex",
+          flexDirection: "column",
+          height: "93.5vh",
+          padding: "20px",
         }}
       >
-        <CreateButton
-          onCreate={handleCreate}
-          disabled={!isFormComplete}
-          fullWidth
-        />
+        {isLoading && (
+          <Box sx={{ width: "100%", my: 2 }}>
+            <LinearProgress />
+          </Box>
+        )}
+        <Stack spacing={2} sx={{ mb: "auto" }}>
+          <NameField name={name} onNameChange={setName} />
+          <CategoryDropdown
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+          <DateField
+            selectedDate={selectedDate}
+            onDateChange={handleDateChange}
+          />
+          <AddMember onAddMember={handleAddMember} />
+          <MemberList
+            members={memberList}
+            selectedBillPayerId={selectedBillPayerId}
+            onSelectBillPayer={handleSelectBillPayer}
+          />
+        </Stack>
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => {
+            setSnackbarOpen(false);
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => {
+              setSnackbarOpen(false);
+            }}
+            severity="warning"
+            sx={{ width: "100%" }}
+          >
+            Please select a bill payer.
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={successSnackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => {
+            setSuccessSnackbarOpen(false);
+          }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => {
+              setSuccessSnackbarOpen(false);
+            }}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Group created successfully!
+          </Alert>
+        </Snackbar>
+
+        <CreateButton onCreate={handleCreate} disabled={!isFormComplete} />
       </Box>
-    </Box>
+    </main>
   );
 };
 

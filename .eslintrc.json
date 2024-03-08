@@ -14,6 +14,7 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -26,12 +27,14 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "jsx-a11y/anchor-is-valid": [
       "off",
+      "off",
       {
         "components": ["Link"],
         "specialLink": ["hrefLeft", "hrefRight"],
         "aspects": ["invalidHref", "preferButton"]
       }
     ]
+
 
     // Add your custom rules here
   }
