@@ -11,7 +11,7 @@ export const votingGift = async (req: NextRequest, res: NextResponse) => {
       const countingVote = await CountVote({ giftId });
       const memberGroup = await GroupMembers.count({
         where: {
-          groupId,
+          group_id: groupId,
         },
       });
       if (memberGroup >= countingVote) {
@@ -30,7 +30,7 @@ export const votingGift = async (req: NextRequest, res: NextResponse) => {
         );
       }
     } catch (error: any) {
-      console.error("Error create group:", error);
+      console.error("Error vote gift:", error);
       return NextResponse.json(
         {
           success: false,

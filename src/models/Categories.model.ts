@@ -12,7 +12,7 @@ const Categories = sequelize.define("categories", {
     category_name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: false,
     },
 });
 

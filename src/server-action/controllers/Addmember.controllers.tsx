@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validationResult } from "express-validator";
 import { addUsernameService } from "../services/Addusername.service";
 export const Addmember = async (
   req: NextRequest,
@@ -8,15 +7,6 @@ export const Addmember = async (
   if (req.method === "POST") {
     const body = await req.json();
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return NextResponse.json(
-          {
-            message: errors.array(),
-          },
-          { status: 400 }
-        );
-      }
       const { groupId, userId, role } = body;
       const addMemberGroup = await addUsernameService({
         groupId,
@@ -32,7 +22,7 @@ export const Addmember = async (
         { status: 200 }
       );
     } catch (err: any) {
-      console.error("Error create group:", err);
+      console.error("Error Add member:", err);
       return NextResponse.json(
         {
           success: false,
