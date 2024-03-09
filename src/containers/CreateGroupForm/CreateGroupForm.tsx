@@ -17,9 +17,16 @@ import axios from "axios";
 import { Member } from "@/components/CreateGroup/type";
 
 const CreateGroupForm: React.FC = () => {
-  const [name, setName] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+  const [name, setName] = useState(
+    () => localStorage.getItem("createGroupName") ?? ""
+  );
+  const [selectedCategory, setSelectedCategory] = useState(
+    () => localStorage.getItem("createGroupCategory") ?? ""
+  );
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(() => {
+    const storedDate = localStorage.getItem("createGroupDate");
+    return storedDate ? dayjs(storedDate) : null;
+  });
   const [selectedBillPayerId, setSelectedBillPayerId] = useState<string | null>(
     null
   );
@@ -29,6 +36,14 @@ const CreateGroupForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    localStorage.setItem("createGroupName", name);
+    localStorage.setItem("createGroupCategory", selectedCategory);
+    if (selectedDate) {
+      localStorage.setItem("createGroupDate", selectedDate.toISOString());
+    }
+  }, [name, selectedCategory, selectedDate]);
 
   useEffect(() => {
     const storedMembers = localStorage.getItem("addedMembers");
@@ -102,6 +117,11 @@ const CreateGroupForm: React.FC = () => {
           role,
         });
       }
+
+      localStorage.removeItem("createGroupName");
+      localStorage.removeItem("createGroupCategory");
+      localStorage.removeItem("createGroupDate");
+      localStorage.removeItem("addedMembers");
 
       setSuccessSnackbarOpen(true);
       setTimeout(() => {
