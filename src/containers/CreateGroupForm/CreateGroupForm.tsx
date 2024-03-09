@@ -98,7 +98,7 @@ const CreateGroupForm: React.FC = () => {
           member.user_id === selectedBillPayerId ? "billPayer" : "member";
         await axios.post("/api/addMember", {
           groupId,
-          userId: member.user_id, // Using 'user_id' as the member identifier
+          userId: member.user_id,
           role,
         });
       }
