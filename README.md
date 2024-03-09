@@ -43,3 +43,15 @@
 
 ### Find Group
 - [GET] /api/findGroup/:userid
+
+### Create Payment
+- [POST] /API/createPayment
+
+```json
+{
+    "billSplitId": 1 (example bill_split_id),
+    "amount": 150000 (example_amount),
+    "paymentMethod": "example payment method",
+    "confirmationStatus": false (true or false)
+}
+```
