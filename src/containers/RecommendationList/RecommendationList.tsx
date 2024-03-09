@@ -44,8 +44,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
           color: theme.palette.text.primary,
           fontSize: 16,
           fontWeight: 500,
-          marginTop: "19px",
-          marginBottom: "11px",
+          padding: "19px 0 11px 20px",
         }}
       >
         Recommendation
