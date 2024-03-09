@@ -45,7 +45,7 @@
 - [GET] /api/findGroup/:userid
 
 ### Create Payment
-- [POST] /API/createPayment
+- [POST] /api/createPayment
 
 ```json
 {
@@ -53,5 +53,28 @@
     "amount": 150000 (example_amount),
     "paymentMethod": "example payment method",
     "confirmationStatus": false (true or false)
+}
+```
+### Vote Gift
+- [POST] /api/voteGift
+
+```json
+{
+    "groupId": 31,
+    "giftId": 1,
+    "userId": 2
+}
+```
+### Add Gift
+- [POST] /api/addGift
+```json
+{
+    "groupId": 31,
+    "name": "example gift",
+    "price": 1200000,
+    "imageUrl": "example link image",
+    "urlLink": "example link product",
+    "userId": 8,
+    "categoryId": 3
 }
 ```
