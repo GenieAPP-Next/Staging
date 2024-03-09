@@ -14,7 +14,7 @@ export const votingGift = async (req: NextRequest, res: NextResponse) => {
           group_id: groupId,
         },
       });
-      if (memberGroup >= countingVote) {
+      if (countingVote < memberGroup) {
         const newVote = await voteGift({
           giftId,
           userId,
@@ -27,6 +27,14 @@ export const votingGift = async (req: NextRequest, res: NextResponse) => {
             data: newVote,
           },
           { status: 200 }
+        );
+      } if(countingVote === memberGroup){
+        return NextResponse.json(
+          {
+            success: true,
+            message: "All group member have voted",
+          },
+          { status: 400 }
         );
       }
     } catch (error: any) {
