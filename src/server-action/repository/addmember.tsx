@@ -1,5 +1,5 @@
 import GroupMembers from "@/models/GroupMember.model";
-import { addMember as addmemberType } from "../types/addmember.types";
+import { addMember as addmemberType } from "../types/addMember.types";
 export const addmember = async ({ groupId, userId, role }: addmemberType) => {
   try {
     const addmember = await GroupMembers.create({
