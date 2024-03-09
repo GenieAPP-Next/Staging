@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { Member } from "./add-member-interface";
 import classes from "./scss/add-member-logistics.module.scss";
-import { convertToInitial } from "./utils/helper-converter";
+import { convertToInitial } from "../utils/helper-converter";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { avatarColors, getColorIndex } from "../utils/avatarColorsUtils";
 
 interface Props {
   selectedMembers: Member[];
@@ -14,15 +15,22 @@ export default function AddMemberLogistics({ selectedMembers, onDeleteMember }: 
     <>
       {selectedMembers.length > 0 ? (
         selectedMembers.map((member) => (
-          <div key={member.name} className={classes.container}>
+          <div key={member.user_id} className={classes.container}>
             <div className={classes.spaceItem}>
               <div className={classes.itemList}>
-                <div className={classes.avatar}>{convertToInitial(member.name)}</div>
-                <span>{member.name}</span>
+                <div
+                  className={classes.avatar}
+                  style={{
+                    backgroundColor: avatarColors[getColorIndex(member.username, avatarColors.length)],
+                  }}
+                >
+                  {convertToInitial(member.username)}
+                </div>
+                <span>{member.username}</span>
               </div>
               <button
                 onClick={() => {
-                  onDeleteMember(member.name);
+                  onDeleteMember(member.username);
                 }}
               >
                 <DeleteOutlineIcon className={classes.deleteButton} />

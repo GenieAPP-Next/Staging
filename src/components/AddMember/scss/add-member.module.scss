@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: space-between;
   margin: auto;
-  padding: 0.2rem 1rem 1rem 1rem;
+  padding: 0rem 1rem 1rem 1rem;
 
   @media (max-width: 768px) {
     padding: 0 1.5rem 1rem 1.5rem;
@@ -51,7 +51,7 @@
     letter-spacing: 0.15px;
     line-height: 20px;
     font-size: 15px;
-    background: #4285f4;
+    background-color: inherit;
     border-radius: 1rem;
     border: none;
     box-shadow:
@@ -76,6 +76,7 @@
   align-items: center;
   text-align: center;
   width: 100%;
+  padding-top: 0.5rem;
 }
 
 .searchContainer {
