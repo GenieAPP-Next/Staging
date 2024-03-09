@@ -1,17 +1,18 @@
-import Groups from "@/models/Groups.model";
+// import Groups from "@/models/Groups.model";
 import GroupMembers from "@/models/GroupMember.model";
 import { inputFindGroup, inputCountmember } from "../types/findGroup.types";
-const findGroup = async ({ name }: inputFindGroup) => {
+const findGroupbyUserid = async ({ userId }: inputFindGroup) => {
   try {
-    const findgrup = await Groups.findOne({
+    const findgrup = await GroupMembers.findAll({
       where: {
-        name,
+        user_id: userId
       },
-      attributes: ["name", "category", "event_date"],
+      attributes: ["group_id"],
     });
+
     return findgrup;
   } catch (err) {
-    console.error("Error find Username:", err);
+    console.error("Error find Group:", err);
     throw err;
   }
 };
@@ -29,4 +30,4 @@ const countMemberGroup = async ({ groupId }: inputCountmember) => {
   }
 };
 
-export { findGroup, countMemberGroup };
+export { findGroupbyUserid, countMemberGroup };

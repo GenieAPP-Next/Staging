@@ -1,5 +1,5 @@
 export interface inputFindGroup {
-    name: string;
+    userId: number;
 }
 export interface inputCountmember{
     groupId: number;

@@ -42,4 +42,4 @@
 - [GET] /api/listMember/:groupid
 
 ### Find Group
-- [GET] /api/findGroup/:nameGroup/:groupId
+- [GET] /api/findGroup/:userid

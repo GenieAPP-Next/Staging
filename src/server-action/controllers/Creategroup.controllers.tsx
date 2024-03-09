@@ -1,23 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validationResult } from "express-validator";
 import { createGroupService } from "../services/Creategroup.service";
 import { Listmembergroup } from "../repository/showlistmember";
-export const Creategroup = async (
-  req: NextRequest,
-  res: NextResponse,
-) => {
+export const Creategroup = async (req: NextRequest, res: NextResponse) => {
   if (req.method === "POST") {
     const body = await req.json();
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return NextResponse.json(
-          {
-            message: errors.array(),
-          },
-          { status: 400 }
-        );
-      }
       const { name, category, eventDate, creatorUserId } = body;
       const newGroup = await createGroupService({
         name,

@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
 import { Findgroup } from "../services/Findgroup.service";
-export const findGroup = async (name: string, groupId: number) => {
+export const findGroup = async (userId: number) => {
   try {
-    console.log(name,groupId)
-    const findingGroup = await Findgroup({ name }, { groupId });
+    console.log(userId)
+    const findingGroup = await Findgroup({ userId });
     return NextResponse.json(
       {
         success: true,
-        message: "Success Finding username",
+        message: "Success Finding group",
         data: findingGroup,
       },
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error finding username:", error);
+    console.error("Error finding group:", error);
     return NextResponse.json(
       {
         success: false,
