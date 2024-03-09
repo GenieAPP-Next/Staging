@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/promise-function-async */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
@@ -8,10 +10,11 @@ import CategoryDropdown from "@/components/CreateGroup/CategoryDropdown";
 import DateField from "@/components/CreateGroup/DateField";
 import dayjs from "dayjs";
 import { MemberList } from "@/components/CreateGroup/MemberList";
-import AddMember from "@/components/CreateGroup/AddMember";
+import AddMemberButton from "@/components/CreateGroup/AddMemberButton";
 import { CreateButton } from "@/components/Button/CreateButton/CreateButton";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Member } from "@/components/CreateGroup/type";
 
 const CreateGroupForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -24,21 +27,21 @@ const CreateGroupForm: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const router = useRouter();
 
-  const dummyMembers = [
-    { id: "7", name: "Alice Wonderland" },
-    { id: "2", name: "Bob" },
-    // { id: "3", name: "Charlie" },
-    //  dummy data
-  ];
-
-  const [memberList] = useState(dummyMembers);
+  useEffect(() => {
+    const storedMembers = localStorage.getItem("addedMembers");
+    if (storedMembers) {
+      setMembers(JSON.parse(storedMembers));
+    }
+  }, []);
 
   const isFormComplete =
     name !== "" &&
     selectedCategory !== "" &&
     selectedDate !== null &&
-    memberList.length > 0 &&
+    members.length > 0 &&
     selectedBillPayerId !== null;
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
@@ -50,12 +53,6 @@ const CreateGroupForm: React.FC = () => {
       console.log(selectedDate.format("YYYY-MM-DD"));
     }
   }, [selectedDate]);
-
-  const router = useRouter();
-
-  const handleAddMember = () => {
-    router.push("/group/add-member");
-  };
 
   const handleSelectBillPayer = (id: string) => {
     setSelectedBillPayerId(id);
@@ -70,7 +67,7 @@ const CreateGroupForm: React.FC = () => {
 
     setIsLoading(true);
 
-    const userId = "7"; // get from user session
+    const userId = "7"; // Replace with actual user session ID
     const formattedDate = selectedDate
       ? selectedDate.format("YYYY-MM-DD")
       : null;
@@ -96,18 +93,19 @@ const CreateGroupForm: React.FC = () => {
         return;
       }
 
-      for (const member of memberList) {
-        const role = member.id === selectedBillPayerId ? "billPayer" : "member";
+      for (const member of members) {
+        const role =
+          member.user_id === selectedBillPayerId ? "billPayer" : "member";
         await axios.post("/api/addMember", {
           groupId,
-          userId: member.id,
+          userId: member.user_id, // Using 'user_id' as the member identifier
           role,
         });
       }
 
       setSuccessSnackbarOpen(true);
       setTimeout(() => {
-        void router.push(`/${name}/gift`);
+        router.push(`/${name}/gift`);
       }, 1500);
     } catch (error) {
       console.error("Error creating group or adding members:", error);
@@ -141,9 +139,11 @@ const CreateGroupForm: React.FC = () => {
             selectedDate={selectedDate}
             onDateChange={handleDateChange}
           />
-          <AddMember onAddMember={handleAddMember} />
+          <AddMemberButton
+            onAddMember={() => router.push("/group/add-member")}
+          />
           <MemberList
-            members={memberList}
+            members={members}
             selectedBillPayerId={selectedBillPayerId}
             onSelectBillPayer={handleSelectBillPayer}
           />
@@ -152,15 +152,11 @@ const CreateGroupForm: React.FC = () => {
         <Snackbar
           open={snackbarOpen}
           autoHideDuration={6000}
-          onClose={() => {
-            setSnackbarOpen(false);
-          }}
+          onClose={() => setSnackbarOpen(false)}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
-            onClose={() => {
-              setSnackbarOpen(false);
-            }}
+            onClose={() => setSnackbarOpen(false)}
             severity="warning"
             sx={{ width: "100%" }}
           >
@@ -171,15 +167,11 @@ const CreateGroupForm: React.FC = () => {
         <Snackbar
           open={successSnackbarOpen}
           autoHideDuration={3000}
-          onClose={() => {
-            setSuccessSnackbarOpen(false);
-          }}
+          onClose={() => setSuccessSnackbarOpen(false)}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
-            onClose={() => {
-              setSuccessSnackbarOpen(false);
-            }}
+            onClose={() => setSuccessSnackbarOpen(false)}
             severity="success"
             sx={{ width: "100%" }}
           >
