@@ -11,10 +11,10 @@ interface SwiperComponentProps {
 const SwiperComponent: React.FC<SwiperComponentProps> = ({ children }) => {
   return (
     <Swiper
-      slidesPerView={3}
-      style={{ padding: "16px 0 16px 5px" }}
+      slidesPerView={2.7}
+      style={{ padding: "0 0 46px 16px" }}
       centeredSlides={false}
-      spaceBetween={30}
+      spaceBetween={15}
       grabCursor={true}
       className='mySwiper'
     >
