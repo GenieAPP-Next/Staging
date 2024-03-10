@@ -12,7 +12,13 @@ export interface RecommendationCardProps {
   onClick?: (id: string) => void;
 }
 
-const RecommendationCard: React.FC<RecommendationCardProps> = ({ id, itemName, price, src, onClick }) => {
+const RecommendationCard: React.FC<RecommendationCardProps> = ({
+  id,
+  itemName,
+  price,
+  src,
+  onClick,
+}) => {
   const theme = useTheme();
   const formattedPrice = price.toLocaleString("id-ID");
 
@@ -44,14 +50,21 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ id, itemName, p
         <Image
           src={src}
           alt={`image for ${itemName}`}
-          layout='cover'
+          layout="cover"
           width={135}
           height={90}
-          objectFit='cover'
+          objectFit="cover"
           style={{ borderRadius: "12px 12px 0 0" }}
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "23px 5px 0 5px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "23px 10px 0 10px",
+        }}
+      >
         <div style={{ flex: 1 }}>
           <Typography
             sx={{
@@ -64,13 +77,23 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ id, itemName, p
           >
             {itemName}
           </Typography>
-          <Typography sx={{ color: theme.palette.primary.main, fontSize: 10, fontWeight: 500 }}>
+          <Typography
+            sx={{
+              color: theme.palette.primary.main,
+              fontSize: 10,
+              fontWeight: 500,
+            }}
+          >
             {`Rp ${formattedPrice}`}
           </Typography>
         </div>
         <IconButton
-          sx={{ backgroundColor: theme.palette.primary.main, width: 40, height: 40 }}
-          aria-label='add'
+          sx={{
+            backgroundColor: theme.palette.primary.main,
+            width: 40,
+            height: 40,
+          }}
+          aria-label="add"
           onClick={() => {
             onClick && onClick(id);
           }}
