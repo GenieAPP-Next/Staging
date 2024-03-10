@@ -4,21 +4,16 @@ import { CardContent, Typography, IconButton, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 
-export interface RecommendationCardProps {
+export interface CardProps {
   id: string;
   itemName: string;
   price: number;
   src: string;
+  creator?: string;
   onClick?: (id: string) => void;
 }
 
-const RecommendationCard: React.FC<RecommendationCardProps> = ({
-  id,
-  itemName,
-  price,
-  src,
-  onClick,
-}) => {
+const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onClick }) => {
   const theme = useTheme();
   const formattedPrice = price.toLocaleString("id-ID");
 
