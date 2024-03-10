@@ -14,7 +14,7 @@ export const Findmember = async (usernameInput: string) => {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error finding username:", error);
+    console.error("Error finding member:", error);
     return NextResponse.json(
       {
         success: false,

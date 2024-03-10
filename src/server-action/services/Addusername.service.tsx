@@ -1,6 +1,6 @@
 import { addmember } from "../repository/addmember";
 import ErrorHandler from "../utils/ErrorHandler";
-import { addMember as addMemberInput } from "../types/addmember.types";
+import { addMember as addMemberInput } from "../types/addMember.types";
 const addUsernameService = async ({
   groupId,
   userId,

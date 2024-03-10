@@ -11,10 +11,10 @@ export const votingGift = async (req: NextRequest, res: NextResponse) => {
       const countingVote = await CountVote({ giftId });
       const memberGroup = await GroupMembers.count({
         where: {
-          groupId,
+          group_id: groupId,
         },
       });
-      if (memberGroup >= countingVote) {
+      if (countingVote < memberGroup) {
         const newVote = await voteGift({
           giftId,
           userId,
@@ -28,9 +28,17 @@ export const votingGift = async (req: NextRequest, res: NextResponse) => {
           },
           { status: 200 }
         );
+      } if(countingVote === memberGroup){
+        return NextResponse.json(
+          {
+            success: true,
+            message: "All group member have voted",
+          },
+          { status: 400 }
+        );
       }
     } catch (error: any) {
-      console.error("Error create group:", error);
+      console.error("Error vote gift:", error);
       return NextResponse.json(
         {
           success: false,
