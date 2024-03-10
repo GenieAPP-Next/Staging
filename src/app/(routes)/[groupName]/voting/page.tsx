@@ -1,12 +1,12 @@
 import Navbar from "@/components/Navbar/Navbar";
-import GiftList from "@/components/Voting/GiftList";
+import Voting from "@/containers/Voting/Voting";
 import React from "react";
 
 const VotingPage = () => {
   return (
     <>
-      <Navbar pageTitle="Voting" />
-      <GiftList />
+      <Navbar pageTitle="Vote" />
+      <Voting />
     </>
   );
 };
