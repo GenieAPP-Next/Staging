@@ -98,23 +98,25 @@ const DashboardData = () => {
   );
 
   return (
-    <Box sx={{ padding: 3, height: "93.5vh", position: "relative" }}>
-      {isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : groups.length > 0 ? (
-        renderGroups()
-      ) : (
-        renderNoGroupContent()
-      )}
+    <Box sx={{ height: "93.5vh", position: "relative" }}>
+      <Box sx={{ overflowY: "auto", padding: 3, height: "93.5vh" }}>
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : groups.length > 0 ? (
+          renderGroups()
+        ) : (
+          renderNoGroupContent()
+        )}
+      </Box>
       <Box
         sx={{
           position: "absolute",
