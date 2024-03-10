@@ -39,7 +39,7 @@ const Gifts = sequelize.define("gifts", {
     type: DataTypes.NUMBER,
     allowNull: false,
   },
-  categories_id: {
+  category_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -56,8 +56,8 @@ Gifts.belongsTo(Users, {
 });
 
 Gifts.belongsTo(Categories, {
-  foreignKey: "categories_id",
-  targetKey: "categories_id",
+  foreignKey: "category_id",
+  targetKey: "category_id",
 });
 
 export default Gifts;

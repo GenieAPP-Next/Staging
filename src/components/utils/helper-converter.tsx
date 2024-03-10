@@ -8,3 +8,8 @@ export function convertToInitial(username: string) {
     .join("")
     .toUpperCase();
 }
+
+
+export function capitalizeFirstLetter(string: string) {
+  return string.replace(/\b(\w)/g, s => s.toUpperCase());
+}

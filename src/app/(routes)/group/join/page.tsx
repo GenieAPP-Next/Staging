@@ -8,9 +8,9 @@ const JoinGroup = () => {
   return (
     <>
       <Navbar pageTitle={"Join Group"} />
-      <div className={styles.main}>
+      <main className={styles.main}>
         <JoinGroupForm />
-      </div>
+      </main>
     </>
   );
 };
