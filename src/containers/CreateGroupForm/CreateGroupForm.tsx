@@ -63,12 +63,6 @@ const CreateGroupForm: React.FC = () => {
     setSelectedDate(date);
   };
 
-  useEffect(() => {
-    if (selectedDate) {
-      console.log(selectedDate.format("YYYY-MM-DD"));
-    }
-  }, [selectedDate]);
-
   const handleSelectBillPayer = (id: string) => {
     setSelectedBillPayerId(id);
     setIsBillPayerSelected(true);
@@ -82,7 +76,13 @@ const CreateGroupForm: React.FC = () => {
 
     setIsLoading(true);
 
-    const userId = "7"; // Replace with actual user session ID
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      console.error("Error: No userId found in localStorage.");
+      setIsLoading(false);
+      setSnackbarOpen(true);
+      return;
+    }
     const formattedDate = selectedDate
       ? selectedDate.format("YYYY-MM-DD")
       : null;
