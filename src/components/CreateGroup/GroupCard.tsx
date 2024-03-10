@@ -17,8 +17,18 @@ const GroupCard: React.FC<GroupCardProps> = ({
           {getInitials(groupName)}
         </Avatar>
         <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item>
-            <Typography variant="h6">{groupName}</Typography>
+          <Grid item xs>
+            <Typography
+              variant="h6"
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "150px",
+              }}
+            >
+              {groupName}
+            </Typography>
             <Typography color="textSecondary">{category}</Typography>
           </Grid>
           <Grid item>
