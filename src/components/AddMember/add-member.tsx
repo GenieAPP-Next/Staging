@@ -22,14 +22,14 @@ export default function AddMember() {
   const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  console.log(selectedMembers);
+  // console.log(selectedMembers);
 
   const fetchSearchResults = useCallback(async (username: string) => {
     setLoading(true);
     try {
       const response = await getMemberByUsername(username);
       const memberData = response.data.data;
-      console.log("consoledata", memberData);
+      // console.log("consoledata", memberData);
 
       setSelectedMembers((currentMembers) => {
         const isMemberExists = currentMembers.some((member) => member.user_id === memberData.user_id);
