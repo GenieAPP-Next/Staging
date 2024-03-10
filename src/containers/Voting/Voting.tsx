@@ -1,10 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import React, { useState } from "react";
 import GiftItem from "@/components/Voting/GiftItem";
-import { Box, Button, List, Typography } from "@mui/material";
-// import axios from "axios";
+import {
+  Box,
+  Button,
+  List,
+  Typography,
+  Snackbar,
+  Alert,
+  SnackbarCloseReason,
+} from "@mui/material";
+import axios from "axios";
 
 const giftsData = [
   {
@@ -32,31 +41,57 @@ const giftsData = [
 
 const Voting: React.FC = () => {
   const [votedItemId, setVotedItemId] = useState<number | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
 
-  const handleVote = (giftId: number) => {
-    setVotedItemId(giftId);
+  const handleSnackbarClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
-  // const handleVote = async (giftId: number) => {
-  //   const groupId = 31; // Replace with actual groupId
-  //   const userId = 2; // Replace with actual userId
+  const handleAlertClose = () => {
+    setSnackbarOpen(false);
+  };
 
-  //   try {
-  //     const response = await axios.post("/api/voteGift", {
-  //       groupId,
-  //       giftId,
-  //       userId,
-  //     });
+  const handleVote = async (giftId: number) => {
+    const groupId = 31; // Replace with actual groupId
+    const userId = 8; // Replace with actual userId
 
-  //     // Handle the response as needed
-  //     console.log(response.data);
+    try {
+      const response = await axios.post("/api/voteGift", {
+        groupId,
+        giftId,
+        userId,
+      });
 
-  //     // Update the voted item state
-  //     setVotedItemId(giftId);
-  //   } catch (error) {
-  //     console.error("Error in vote submission:", error);
-  //   }
-  // };
+      console.log(response.data);
+      setSnackbarMessage("Successfully voted for the gift!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
+      setVotedItemId(giftId);
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message || "Error submitting vote.";
+        console.error("Error in vote submission:", message);
+        setSnackbarMessage(message);
+      } else {
+        console.error("Error in vote submission:", error);
+        setSnackbarMessage("An unexpected error occurred.");
+      }
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
 
   return (
     <main>
@@ -77,7 +112,7 @@ const Voting: React.FC = () => {
               votes={gift.votes}
               imageUrl={gift.imageUrl}
               onVote={() => {
-                handleVote(gift.giftId);
+                void handleVote(gift.giftId);
               }}
               disabled={votedItemId !== null && votedItemId !== gift.giftId}
             />
@@ -102,6 +137,20 @@ const Voting: React.FC = () => {
           </Button>
         </Box>
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </main>
   );
 };
