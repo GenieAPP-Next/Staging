@@ -16,6 +16,7 @@ const SubmitButton = ({ onClick, children, ...rest }: ButtonComponentProps) => {
         height: "40px",
         borderRadius: "15px",
         textTransform: "none",
+        marginX: "auto",
       }}
       onClick={onClick}
       {...rest}
