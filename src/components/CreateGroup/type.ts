@@ -16,8 +16,8 @@ export interface DateFieldProps {
 }
 
 export interface Member {
-  id: string;
-  name: string;
+  user_id: string;
+  username: string;
 }
 
 export interface MemberListProps {

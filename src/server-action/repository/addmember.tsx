@@ -3,9 +3,9 @@ import { addMember as addmemberType } from "../types/addMember.types";
 export const addmember = async ({ groupId, userId, role }: addmemberType) => {
   try {
     const addmember = await GroupMembers.create({
-        group_id: groupId,
-        user_id: userId,
-        role,
+      group_id: groupId,
+      user_id: userId,
+      role,
     });
     return addmember;
   } catch (err) {

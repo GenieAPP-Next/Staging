@@ -1,14 +1,14 @@
 import Votes from "@/models/Votes.model";
 import { Votegift as voteInput } from "../types/voteGift.types";
 export const voteGift = async ({ giftId, userId }: voteInput) => {
-    try{
+    try {
         const vote = await Votes.create({
-            gift_id: giftId,
-            user_id: userId
+            giftId,
+            userId
         });
         return vote
-    } catch(error){
+    } catch (error) {
         console.error("Error vote gift:", error);
-    throw error;
+        throw error;
     }
 };
