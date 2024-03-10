@@ -1,4 +1,4 @@
 export interface Member {
-  name: string;
-  status: string;
+  user_id: number;
+  username: string;
 }
