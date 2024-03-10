@@ -19,6 +19,7 @@ import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import theme from "@/theme/theme";
+import axios from "axios";
 
 interface RegisterFormData {
   username: string;
@@ -52,12 +53,12 @@ function RegisterForm() {
         return { values, errors: {} };
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
-          const formErrors = error.inner.reduce(
+          const formErrors = error.inner.reduce<Record<string, any>>(
             (acc, cur) => {
               acc[cur.path as any] = { message: cur.message };
               return acc;
             },
-            {} as Record<string, any>
+            {}
           );
           return { values, errors: formErrors };
         } else {
@@ -72,18 +73,10 @@ function RegisterForm() {
     setSubmitting(true);
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await axios.post("/api/auth/register", data);
 
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        setSnackbarMessage(responseData.message || "Registration failed");
+      if (response.status !== 200) {
+        setSnackbarMessage(response.data.message || "Registration failed");
         setSnackbarSeverity("error");
       } else {
         setSnackbarMessage("Registration successful");
@@ -91,9 +84,11 @@ function RegisterForm() {
         router.push("/login");
       }
       setSnackbarOpen(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error("An unexpected error occurred:", error);
-      setSnackbarMessage("An unexpected error occurred");
+      const message =
+        error.response?.data?.message || "An unexpected error occurred";
+      setSnackbarMessage(message);
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     } finally {
