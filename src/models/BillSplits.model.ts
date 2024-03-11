@@ -4,6 +4,7 @@ import sequelize from "@/server-action/middlewares/dbConnection";
 
 import Bills from "./Bills.model";
 import Users from "./Users.model";
+import Groups from "./Groups.model";
 
 const BillSplits = sequelize.define("bill_splits", {
   bill_split_id: {
@@ -18,6 +19,11 @@ const BillSplits = sequelize.define("bill_splits", {
     unique: false,
   },
   user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: false,
+  },
+  group_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: false,
@@ -42,6 +48,11 @@ BillSplits.belongsTo(Bills, {
 BillSplits.belongsTo(Users, {
   foreignKey: "user_id",
   targetKey: "user_id",
+});
+
+BillSplits.belongsTo(Groups, {
+  foreignKey: "group_id",
+  targetKey: "group_id",
 });
 
 export default BillSplits;
