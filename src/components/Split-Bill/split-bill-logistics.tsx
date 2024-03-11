@@ -1,14 +1,23 @@
+"use client";
 import { LinearProgress } from "@mui/material";
 import { avatarColors, getColorIndex } from "../utils/avatarColorsUtils";
 import { convertToInitial } from "../utils/helper-converter";
 import classes from "./scss/split-bill-logistics.module.scss";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function SplitBillLogistics() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handlePay = () => {
+    router.push(`${pathname}/payment`);
+  };
+
   return (
     <div className={classes.itemContainer}>
       <div className={classes.itemHeader} style={{ marginBottom: "0.5rem" }}>
         <p>Balance</p>
-        <button>Pay</button>
+        <button onClick={handlePay}>Pay</button>
       </div>
 
       <div className={classes.itemCard}>
