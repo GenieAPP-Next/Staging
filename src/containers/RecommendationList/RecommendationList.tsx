@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useEffect, useState } from "react";
 import SwiperComponent from "@/components/SwiperComponent/SwiperComponent";
@@ -8,6 +8,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 import ListCard from "@/components/Card/ListCard/ListCard";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import AddGiftCard from "@/components/AddGift/AddGiftCard";
+import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
 
 interface RecommendationListProps {
   data: Array<{
@@ -15,6 +18,7 @@ interface RecommendationListProps {
     itemName: string;
     price: number;
     itemImage: string;
+    creator: string; 
   }>;
 }
 
@@ -26,30 +30,48 @@ interface Item {
   creator: string;
 }
 
+interface AddGift {
+  src: string;
+  creator: string;
+}
+
 const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
   const theme = useTheme();
   const [giftItems, setGiftItems] = useState<Item[]>([]);
+  const [drawerOpen, setDrawerOpen] = useState(false); // State for drawer open/close
 
   useEffect(() => {
-    const storedItems: Item[] = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
+    const storedItems: Item[] = JSON.parse(
+      localStorage.getItem("giftItems") ?? "[]"
+    );
     setGiftItems(storedItems);
-  }, [giftItems]);
+  }, []);
 
   const handleAdd = (id: string) => {
-    const existingCartItems = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
+    const existingCartItems: Item[] = JSON.parse(
+      localStorage.getItem("giftItems") ?? "[]"
+    );
 
-    if (!existingCartItems.some((item: Item) => item.id === id)) {
-      const selectedItem = data.find((item) => item.id === id);
-      if (selectedItem) {
-        existingCartItems.push(selectedItem);
-        localStorage.setItem("giftItems", JSON.stringify(existingCartItems));
-      }
+    const selectedItem = data.find((item) => item.id === id);
+    if (
+      selectedItem &&
+      !existingCartItems.some((item: Item) => item.id === id)
+    ) {
+      const updatedGifts: Item[] = [...existingCartItems, selectedItem];
+      setGiftItems(updatedGifts);
+      localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
     }
   };
 
-  // SECTIONNYA RESYA
-  const handleAddNewGift = () => {
-    console.log(giftItems);
+  const handleAddNewGift = (gift: AddGift) => {
+    const existingGiftItems: AddGift[] = JSON.parse(
+      localStorage.getItem("giftItems") ?? "[]"
+    );
+
+    const updatedGifts: AddGift[] = [...existingGiftItems, gift];
+    setGiftItems(updatedGifts);
+    localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
+    setDrawerOpen(false);
   };
 
   const handleSubmit = () => {
@@ -64,42 +86,56 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
           fontSize: 16,
           fontWeight: 500,
           padding: "20px 0 10px 20px",
-        }}
-      >
+        }}>
         Recommendation
       </Typography>
       <SwiperComponent>
         {data.map((item) => (
           <div key={item.id}>
-            <RecommendationCard {...item} src={item.itemImage} onClick={handleAdd} />
+            <RecommendationCard
+              {...item}
+              src={item.itemImage}
+              onClick={() => handleAdd(item.id)} // Updated this line
+            />
           </div>
         ))}
       </SwiperComponent>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 16px 14px 16px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 16px 14px 16px",
+        }}>
         <Typography
           sx={{
             color: theme.palette.text.primary,
             fontSize: 16,
             fontWeight: 500,
-          }}
-        >
+          }}>
           Your Gift
         </Typography>
         <Button
-          variant='text'
-          color='primary'
+          variant="text"
+          color="primary"
           startIcon={<AddIcon />}
-          onClick={handleAddNewGift}
+          onClick={() => setDrawerOpen(true)}
           sx={{
             textTransform: "none",
             fontSize: 14,
             fontWeight: 500,
-          }}
-        >
+          }}>
           <Typography>Add Gift</Typography>
         </Button>
       </Box>
-      <Divider sx={{ width: "calc(425px - 24px)", marginX: "auto", color: "#CAC4D0", marginBottom: "15px" }} />
+      <Divider
+        sx={{
+          width: "calc(425px - 24px)",
+          marginX: "auto",
+          color: "#CAC4D0",
+          marginBottom: "15px",
+        }}
+      />
       <Box
         style={{
           display: "flex",
@@ -107,8 +143,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
           justifyContent: "space-between",
           minHeight: "400px",
           marginBottom: "20px",
-        }}
-      >
+        }}>
         <Box
           sx={{
             display: "flex",
@@ -116,8 +151,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
             alignItems: "center",
             flexDirection: "column",
             marginBottom: "15px",
-          }}
-        >
+          }}>
           {giftItems.map((item) => (
             <Box key={item.id}>
               <ListCard
@@ -134,6 +168,28 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
           Submit
         </SubmitButton>
       </Box>
+      <SwipeableDrawer
+        anchor="bottom"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onOpen={() => setDrawerOpen(true)}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: "425px", 
+            borderRadius: "25px 25px 0 0", 
+            margin: "auto", 
+          },
+        }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}>
+          <HorizontalRuleRoundedIcon sx={{ fontSize: "large" }} />
+        </Box>
+        <AddGiftCard onAddGift={handleAddNewGift} />
+      </SwipeableDrawer>
     </>
   );
 };
