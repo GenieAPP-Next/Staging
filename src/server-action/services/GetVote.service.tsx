@@ -9,7 +9,7 @@ const getVoteGift = async ({ giftId }: Countvote, { groupId }: Membergroup) => {
     const Member = await detailMember({ giftId });
     return {
       status: 200,
-      message: "Sucessfuly voting Gift",
+      message: "Sucessfuly get vote Gift",
       data: {
         Gift: detailsGift,
         Total_vote: countingVote,
