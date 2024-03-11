@@ -1,6 +1,5 @@
 import GroupMembers from "@/models/GroupMember.model";
-// import { addMember } from "../types/addmember.types";
-import { showlistmember } from "../types/addmember.types";
+import { showlistmember } from "../types/addMember.types";
 export const Listmembergroup = async ({ groupId }: showlistmember) => {
   try {
     const memberGroup = await GroupMembers.findAll({

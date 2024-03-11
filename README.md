@@ -49,10 +49,10 @@
 
 ```json
 {
-    "billSplitId": 1 (example bill_split_id),
-    "amount": 150000 (example_amount),
+    "billSplitId": 1,
+    "amount": 150000,
     "paymentMethod": "example payment method",
-    "confirmationStatus": false (true or false)
+    "confirmationStatus": false 
 }
 ```
 ### Vote Gift
@@ -60,9 +60,9 @@
 
 ```json
 {
-    "groupId": 31,
-    "giftId": 1,
-    "userId": 2
+    "groupId": 29,
+    "userId": 7,
+    "giftId": 9
 }
 ```
 ### Add Gift
