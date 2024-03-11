@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddMemberLogistics from "./add-member-logistics";
 import MemberSearchInput from "./search-input";
 import SubmitAddedMembers from "./submit-added-members";
@@ -22,14 +22,14 @@ export default function AddMember() {
   const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  console.log(selectedMembers);
+  // console.log(selectedMembers);
 
   const fetchSearchResults = useCallback(async (username: string) => {
     setLoading(true);
     try {
       const response = await getMemberByUsername(username);
       const memberData = response.data.data;
-      console.log("consoledata", memberData);
+      // console.log("consoledata", memberData);
 
       setSelectedMembers((currentMembers) => {
         const isMemberExists = currentMembers.some((member) => member.user_id === memberData.user_id);
@@ -55,12 +55,22 @@ export default function AddMember() {
   };
 
   const handleDeleteMember = (memberName: string) => {
-    setSelectedMembers(selectedMembers.filter((member) => member.username !== memberName));
+    const updatedMembers = selectedMembers.filter((member) => member.username !== memberName);
+    setSelectedMembers(updatedMembers);
+
+    localStorage.setItem("addedMembers", JSON.stringify(updatedMembers));
   };
 
   const clearErrorMessage = () => {
     setErrorMessage("");
   };
+
+  useEffect(() => {
+    const storedMembers = localStorage.getItem("addedMembers");
+    if (storedMembers) {
+      setSelectedMembers(JSON.parse(storedMembers) as Member[]);
+    }
+  }, []);
 
   return (
     <section id="add-members">

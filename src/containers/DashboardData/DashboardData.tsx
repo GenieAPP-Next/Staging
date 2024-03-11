@@ -31,7 +31,7 @@ interface GroupsData {
 
 const DashboardData = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Assume loading initially
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
@@ -57,10 +57,10 @@ const DashboardData = () => {
           console.error("Error fetching groups:", error);
         })
         .finally(() => {
-          setIsLoading(false); // Stop loading after API call completion or error
+          setIsLoading(false);
         });
     } else {
-      setIsLoading(false); // No user ID found, so not loading
+      setIsLoading(false);
     }
   }, []);
 
@@ -81,6 +81,12 @@ const DashboardData = () => {
   const renderNoGroupContent = () => (
     <div className={styles.dashboardWrapper}>
       <Box className={styles.noGroupContent}>
+        <Box
+          component="img"
+          src="/img/empty-data.jpeg"
+          alt="No Data"
+          className={styles.noGroupImage}
+        />
         <Typography variant="h6" className={styles.textH6}>
           Group Not Found
         </Typography>
@@ -92,23 +98,25 @@ const DashboardData = () => {
   );
 
   return (
-    <Box sx={{ padding: 3, height: "93.5vh", position: "relative" }}>
-      {isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : groups.length > 0 ? (
-        renderGroups()
-      ) : (
-        renderNoGroupContent()
-      )}
+    <Box sx={{ height: "93.5vh", position: "relative" }}>
+      <Box sx={{ overflowY: "auto", padding: 3, height: "93.5vh" }}>
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : groups.length > 0 ? (
+          renderGroups()
+        ) : (
+          renderNoGroupContent()
+        )}
+      </Box>
       <Box
         sx={{
           position: "absolute",
