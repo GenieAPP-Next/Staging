@@ -1,4 +1,4 @@
-import { showlistmember as inputGroupId } from "../types/addmember.types";
+import { showlistmember as inputGroupId } from "../types/addMember.types";
 import { Listmembergroup } from "../repository/showlistmember";
 import ErrorHandler from "../utils/ErrorHandler";
 const showlistmember = async ({ groupId }: inputGroupId) => {
