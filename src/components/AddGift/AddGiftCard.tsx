@@ -4,9 +4,6 @@ import Box from "@mui/material/Box";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
 import { Typography } from "@mui/material";
 
-// Define or import imgbbApi here
-const imgbbApi = "your_api_key_here";
-
 interface AddGiftCardProps {
   onAddGift: (gift: AddGift) => any;
 }
@@ -44,6 +41,7 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
   };
 
   const handleImageUpload = async () => {
+    console.log("File input ref:", fileInputRef.current);
     if (!fileInputRef.current?.files || !fileInputRef.current.files[0]) {
       console.error("No image selected for upload");
       return;
@@ -54,7 +52,7 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
 
     try {
       const response = await fetch(
-        `https://api.imgbb.com/1/upload?key=${imgbbApi}`,
+        `https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API}`,
         {
           method: "POST",
           body: formData,
@@ -63,6 +61,7 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Uploaded image data:", data);
         setUploadedImageUrl(data.data.url);
         setUploadedImageName(data.data.name);
         setFormData((prevData) => ({
@@ -99,7 +98,12 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
         name="itemName"
         value={formData.itemName}
         onChange={handleChange}
-        sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
+        sx={{
+          marginBottom: "12px",
+          width: "375px",
+          marginX: "auto",
+          fontcolor: "grey",
+        }}
       />
       <TextField
         fullWidth
@@ -114,7 +118,8 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       <TextField
         fullWidth
         label="Image"
-        // variant="outlined"
+        focused
+        variant="outlined"
         name="itemImage"
         type="file"
         ref={fileInputRef}
