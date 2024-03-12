@@ -2,9 +2,7 @@ import { Votegift, Membergroup as inputGroupId } from "../types/voteGift.types";
 import {
   voteGift as voting,
   totalVote,
-  details,
   memberGroup,
-  detailMember,
 } from "../repository/votegift";
 import ErrorHandler from "../utils/ErrorHandler";
 const voteGift = async (
@@ -17,15 +15,11 @@ const voteGift = async (
     if (Count < member) {
       const addVote = await voting({ userId, giftId });
       const countingVote = await totalVote({ giftId });
-      const detailsGift = await details({ groupId });
-      const Member = await detailMember({ giftId });
       return {
         status: 200,
         message: "Sucessfuly voting Gift",
         data: {
-          Gift: detailsGift,
           Total_vote: countingVote,
-          user: Member,
           vote: addVote,
         },
       };
