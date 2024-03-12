@@ -1,19 +1,27 @@
-import { totalVote, detailMember, details } from "../repository/votegift";
+import { details, detailMember } from "../repository/getvote.repository";
 import ErrorHandler from "../utils/ErrorHandler";
-import { Countvote, Membergroup } from "../types/voteGift.types";
+import { Membergroup } from "../types/voteGift.types";
+import { memberGroup } from "../repository/votegift";
 
-const getVoteGift = async ({ giftId }: Countvote, { groupId }: Membergroup) => {
+const getVoteGift = async ({ groupId }: Membergroup) => {
   try {
-    const countingVote = await totalVote({ giftId });
     const detailsGift = await details({ groupId });
-    const Member = await detailMember({ giftId });
+    const membersByGift = await detailMember({ groupId });
+    const member = await memberGroup({ groupId });
+    const formattedGifts = detailsGift.map((gift) => {
+      const giftId = gift.getDataValue("gift_id") as number;
+      return {
+        ...gift.toJSON(),
+        total_member: member,
+        user: membersByGift[giftId] || [],
+      };
+    });
+
     return {
       status: 200,
-      message: "Sucessfuly get vote Gift",
+      message: "Successfully get vote Gift",
       data: {
-        Gift: detailsGift,
-        Total_vote: countingVote,
-        user: Member,
+        Gift: formattedGifts,
       },
     };
   } catch (error: any) {
@@ -24,4 +32,5 @@ const getVoteGift = async ({ giftId }: Countvote, { groupId }: Membergroup) => {
     });
   }
 };
+
 export { getVoteGift };

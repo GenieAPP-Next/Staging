@@ -1,8 +1,8 @@
 import { getVoteGift } from "../services/GetVote.service";
 import {  NextResponse } from "next/server";
-export const Getvote = async (groupId: number, giftId:number) => {
+export const Getvote = async (groupId: number) => {
   try {
-    const getVote = await getVoteGift({ giftId }, { groupId });
+    const getVote = await getVoteGift({ groupId });
     return NextResponse.json(
       {
         success: true,
