@@ -2,26 +2,19 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
+import { Item } from "@/containers/RecommendationList/RecommendationList";
 
 interface AddGiftCardProps {
-  onAddGift: (gift: AddGift) => any;
-}
-
-interface AddGift {
-  id: string;
-  itemName: string;
-  price: string;
-  itemImage: string;
-  src: string;
+  onAddGift: (gift: Item) => any;
 }
 
 const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
-  const [formData, setFormData] = useState<AddGift>({
-    id: "",
-    itemName: "",
-    price: "",
-    itemImage: "",
-    src: "",
+  const [formData, setFormData] = useState<Item>({
+    gift_id: "",
+    name: "",
+    price: 0,
+    image_url: "",
+    url_link: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,20 +23,20 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
     formattedValue = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "price" ? ` ${formattedValue}` : value,
+      [name]: name === "price" ? parseFloat(formattedValue) : value,
     }));
   };
 
   const handleAdd = () => {
-    const id = Math.random().toString(36).substr(2, 9);
-    const newGift: AddGift = { ...formData, id };
+    const gift_id = Math.random().toString(36).substr(2, 9);
+    const newGift: Item = { ...formData, gift_id };
     onAddGift(newGift);
     setFormData({
-      id: "",
-      itemName: "",
-      price: " ",
-      itemImage: "",
-      src: "",
+      gift_id: "",
+      name: "",
+      price: 0,
+      image_url: "",
+      url_link: "",
     });
   };
 
@@ -51,45 +44,45 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
     <Box sx={{ padding: "16px", textAlign: "center" }}>
       <TextField
         fullWidth
-        label="Name"
-        variant="outlined"
-        name="itemName"
-        value={formData.itemName}
+        label='Name'
+        variant='outlined'
+        name='name'
+        value={formData.name}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
       <TextField
         fullWidth
-        label="Price"
-        variant="outlined"
-        name="price"
-        type="text"
+        label='Price'
+        variant='outlined'
+        name='price'
+        type='text'
         value={formData.price}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
       <TextField
         fullWidth
-        label="Image"
-        variant="outlined"
-        name="itemImage"
-        value={formData.itemImage}
+        label='Image'
+        variant='outlined'
+        name='image_url'
+        value={formData.image_url}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
       <TextField
         fullWidth
-        label="Marketplace Link"
-        variant="outlined"
-        name="src"
-        value={formData.src}
+        label='Marketplace Link'
+        variant='outlined'
+        name='url_link'
+        value={formData.url_link}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
       <Box sx={{ textAlign: "center" }}>
         <SubmitButton
-          variant="contained"
-          color="primary"
+          variant='contained'
+          color='primary'
           sx={{
             width: "375px",
             height: "40px",
@@ -97,7 +90,8 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
             textTransform: "none",
             marginX: "auto",
           }}
-          onClick={handleAdd}>
+          onClick={handleAdd}
+        >
           Add
         </SubmitButton>
       </Box>

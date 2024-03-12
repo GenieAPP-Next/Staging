@@ -3,13 +3,13 @@ import { CardContent, Typography, Box } from "@mui/material";
 import { CardProps } from "../RecommendationCard/RecommendationCard";
 import { useTheme } from "@mui/material/styles";
 
-const ListCard: React.FC<CardProps> = ({ id, itemName, price, src, creator }) => {
+const ListCard: React.FC<CardProps> = ({ gift_id, name, price, image_url, username }) => {
   const theme = useTheme();
   const formattedPrice = price.toLocaleString("id-ID");
   return (
     <>
       <CardContent
-        key={id}
+        key={gift_id}
         sx={{
           width: 328,
           height: 80,
@@ -32,7 +32,7 @@ const ListCard: React.FC<CardProps> = ({ id, itemName, price, src, creator }) =>
               overflow: "hidden",
             }}
           >
-            {itemName}
+            {name}
           </Typography>
           <Typography sx={{ color: theme.palette.primary.main, fontSize: 20, fontWeight: 500 }}>
             {`Rp ${formattedPrice}`}
@@ -45,13 +45,13 @@ const ListCard: React.FC<CardProps> = ({ id, itemName, price, src, creator }) =>
               overflow: "hidden",
             }}
           >
-            Added by {creator}
+            Added by {username}
           </Typography>
         </Box>
         <Box sx={{ flex: "none" }}>
           <Image
-            src={src}
-            alt={`image for ${itemName}`}
+            src={image_url}
+            alt={`image for ${name}`}
             layout='fixed'
             width={136}
             height={80}

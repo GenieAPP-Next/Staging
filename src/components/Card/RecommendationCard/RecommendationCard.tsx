@@ -5,21 +5,21 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTheme } from "@mui/material/styles";
 
 export interface CardProps {
-  id: string;
-  itemName: string;
+  gift_id: string;
+  name: string;
   price: number;
-  src: string;
-  creator?: string;
+  image_url: string;
+  username?: string;
   onClick?: (id: string) => void;
 }
 
-const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onClick }) => {
+const RecommendationCard: React.FC<CardProps> = ({ gift_id, name, price, image_url, onClick }) => {
   const theme = useTheme();
   const formattedPrice = price.toLocaleString("id-ID");
 
   return (
     <CardContent
-      key={id}
+      key={gift_id}
       sx={{
         width: 137,
         height: 184,
@@ -43,12 +43,12 @@ const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onC
       >
         {/* add alternate image if there are no image or still fetching image data */}
         <Image
-          src={src}
-          alt={`image for ${itemName}`}
-          layout="cover"
+          src={image_url}
+          alt={`Gift image for ${name}`}
+          layout='cover'
           width={135}
           height={90}
-          objectFit="cover"
+          objectFit='cover'
           style={{ borderRadius: "12px 12px 0 0" }}
         />
       </Box>
@@ -70,7 +70,7 @@ const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onC
               textOverflow: "ellipsis",
             }}
           >
-            {itemName}
+            {name}
           </Typography>
           <Typography
             sx={{
@@ -88,9 +88,9 @@ const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onC
             width: 40,
             height: 40,
           }}
-          aria-label="add"
+          aria-label='add'
           onClick={() => {
-            onClick && onClick(id);
+            onClick && onClick(gift_id);
           }}
         >
           <AddIcon sx={{ color: theme.palette.common.white }} />
