@@ -132,7 +132,7 @@ const Voting: React.FC = () => {
           >
             All member groups must vote before proceeding with the split bill.
           </Typography>
-          <Button variant="contained" fullWidth sx={{ borderRadius: "50px" }}>
+          <Button variant="contained" fullWidth sx={{ borderRadius: "14px" }}>
             Split Bill
           </Button>
         </Box>

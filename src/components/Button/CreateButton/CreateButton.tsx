@@ -19,7 +19,7 @@ export const CreateButton: React.FC<CreateButtonProps> = ({
       onClick={onCreate}
       fullWidth={fullWidth}
       disabled={disabled}
-      sx={{ textTransform: "none", borderRadius: 15 }}
+      sx={{ textTransform: "none", borderRadius: "14px" }}
     >
       Create
     </Button>

@@ -196,7 +196,7 @@ function LoginForm() {
               disabled={isSubmitting}
               sx={{
                 width: "100%",
-                borderRadius: 15,
+                borderRadius: "14px",
                 mt: 3,
                 fontSize: 12,
               }}
