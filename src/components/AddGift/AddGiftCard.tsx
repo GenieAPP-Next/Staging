@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
+// import { Typography } from "@mui/material";
 
 interface AddGiftCardProps {
   onAddGift: (gift: AddGift) => any;
@@ -23,6 +24,11 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
     itemImage: "",
     src: "",
   });
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [uploadedImageName, setUploadedImageName] = useState<string | null>(
+    null
+  );
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,6 +38,49 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       ...prevData,
       [name]: name === "price" ? ` ${formattedValue}` : value,
     }));
+  };
+
+  const handleImageUpload = async () => {
+    // console.log("File input ref:", fileInputRef.current);
+    // console.log("Files:", fileInputRef.current?.files);
+
+    // Check if a file is selected
+    if (fileInputRef.current?.files?.[0]) {
+      const file = fileInputRef.current.files[0];
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // console.log("Attempting to upload file:", file);
+
+      try {
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await response.json();
+        // console.log("Response from imgBB:", data);
+
+        if (data.success && data.data && data.data.url) {
+          setUploadedImageUrl(data.data.url);
+          setUploadedImageName(data.data.image.filename);
+          setFormData((prevData) => ({
+            ...prevData,
+            itemImage: data.data.url,
+          }));
+        } else {
+          console.error("Failed to retrieve image URL from imgBB response");
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    } else {
+      console.error("No image selected for upload");
+    }
   };
 
   const handleAdd = () => {
@@ -56,7 +105,12 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
         name="itemName"
         value={formData.itemName}
         onChange={handleChange}
-        sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
+        sx={{
+          marginBottom: "12px",
+          width: "375px",
+          marginX: "auto",
+          fontcolor: "grey",
+        }}
       />
       <TextField
         fullWidth
@@ -71,12 +125,17 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       <TextField
         fullWidth
         label="Image"
+        focused
         variant="outlined"
         name="itemImage"
-        value={formData.itemImage}
-        onChange={handleChange}
+        type="file"
+        inputRef={fileInputRef}
+        onChange={handleImageUpload}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
+      {/* {uploadedImageUrl && uploadedImageName && (
+        <Typography>{uploadedImageName}</Typography>
+      )} */}
       <TextField
         fullWidth
         label="Marketplace Link"
@@ -97,7 +156,8 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
             textTransform: "none",
             marginX: "auto",
           }}
-          onClick={handleAdd}>
+          onClick={handleAdd}
+        >
           Add
         </SubmitButton>
       </Box>
