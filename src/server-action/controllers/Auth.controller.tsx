@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { registerService, loginService } from "../services/Auth.service";
+import { cookies } from "next/headers";
 
 const RegisterController = async (req: NextRequest, res: NextResponse) => {
 	if (req.method === "POST") {
@@ -51,9 +52,23 @@ const LoginController = async (req: NextRequest, res: NextResponse) => {
 		console.log(body);
 
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
 			const userLog = await loginService({ email, password });
 			console.log(userLog);
+			cookies().set({
+				name: "accessToken",
+				value: `${userLog.accessToken}`,
+				httpOnly: true,
+				path: "/",
+				maxAge: 1 * 60 * 60,
+			});
+			cookies().set({
+				name: "refreshToken",
+				value: `${userLog.refreshToken}`,
+				httpOnly: true,
+				path: "/",
+				maxAge: 7 * 24 * 60 * 60,
+			});
+
 			return NextResponse.json(
 				{
 					success: true,
