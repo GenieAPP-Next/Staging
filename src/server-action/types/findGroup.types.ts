@@ -4,3 +4,6 @@ export interface inputFindGroup {
 export interface inputCountmember{
     groupId: number;
 }
+export interface inputGroupName{
+    groupName: string;
+}

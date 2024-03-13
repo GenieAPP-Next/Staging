@@ -1,9 +1,9 @@
 import { PostSplitBill } from "../repository/splitbill.repository";
 import ErrorHandler from "../utils/ErrorHandler";
 import { postSplitBill } from "../types/splitBill.type";
-const SplitBill = async ({ groupId }: postSplitBill) => {
+const SplitBill = async ({ giftId, groupId }: postSplitBill) => {
   try {
-    const postBill = await PostSplitBill({ groupId });
+    const postBill = await PostSplitBill({ giftId, groupId });
     return {
       status: 200,
       message: "Sucess post Split Bill",

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { Createbill as Bill } from "../services/Createbill.service";
 import { SplitBill as Split } from "../services/SplitBill.service";
-export const splitBill = async (groupId: number) => {
+export const splitBill = async (groupId: number, giftId: number) => {
   try {
-    const createBill = await Bill({ groupId });
-    const SplitBill = await Split({ groupId });
+    const createBill = await Bill({ groupId, giftId });
+    const SplitBill = await Split({ groupId, giftId });
     return NextResponse.json(
       {
         success: true,

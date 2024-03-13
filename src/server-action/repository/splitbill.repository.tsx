@@ -24,16 +24,16 @@ const SplitBill = async ({ groupId }: splitBill) => {
   }
 };
 
-export const PostSplitBill = async ({ groupId }: postSplitBill) => {
+export const PostSplitBill = async ({ giftId, groupId }: postSplitBill) => {
   try {
-    const findGiftId = await Gifts.findOne({
-      where: {
-        group_id: groupId,
-      },
-      attributes: ["gift_id"],
-    });
+    // const findGiftId = await Gifts.findOne({
+    //   where: {
+    //     group_id: groupId,
+    //   },
+    //   attributes: ["gift_id"],
+    // });
 
-    const giftId = findGiftId?.getDataValue("gift_id") as number;
+    // const giftId = findGiftId?.getDataValue("gift_id") as number;
 
     const findBillId = await Bills.findOne({
       where: {

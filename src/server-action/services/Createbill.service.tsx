@@ -1,9 +1,9 @@
 import { Createbill as Bill } from "../repository/createbill.repository";
 import { createBill } from "../types/createBill.type";
 import ErrorHandler from "../utils/ErrorHandler";
-const Createbill = async ({ groupId }: createBill) => {
+const Createbill = async ({ giftId, groupId }: createBill) => {
   try {
-    const create = await Bill({ groupId });
+    const create = await Bill({ giftId, groupId });
     return {
       status: 200,
       message: "Successfuly Create Bill",

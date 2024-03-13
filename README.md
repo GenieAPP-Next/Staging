@@ -78,3 +78,8 @@
     "categoryId": 3
 }
 ```
+### Post SplitBill
+- [POST] /api/:groupId/:giftId
+
+### GET SplitBill
+- [GET] /api/:groupId/userId
