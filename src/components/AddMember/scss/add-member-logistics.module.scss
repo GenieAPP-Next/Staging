@@ -1,0 +1,99 @@
+.container {
+  max-width: 500px;
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  width: 100%;
+  gap: 0.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.spaceItem {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  button {
+    background: transparent;
+    border: none;
+  }
+}
+
+.itemList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+
+  span {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 288px) {
+    gap: 0.5rem;
+  }
+}
+
+.divider {
+  width: 500px;
+  height: 1px;
+  background-color: #cac4d0;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 9999px;
+  color: #fff;
+  letter-spacing: 0.15px;
+  font-weight: 500;
+}
+
+.noMemberImg {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+
+  img {
+    object-fit: cover;
+    aspect-ratio: 1/1;
+  }
+
+  @media (max-width: 768px) {
+    width: 350px;
+    height: 350px;
+  }
+  @media (max-width: 300px) {
+    width: auto;
+    height: auto;
+  }
+}
+
+.deleteButton {
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  color: rgb(190 18 60);
+  transition: ease-in-out;
+  transition-duration: 150ms;
+}

@@ -1,0 +1,42 @@
+.dashboardWrapper {
+    height: 80vh;
+
+    .noGroupContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .noGroupImage {
+        max-width: 90%;
+    }
+
+
+    .noGroupText {
+        margin-top: 10;
+
+        @media (min-width: 425px) {
+            max-width: 75%;
+        }
+
+        @media (min-width: 375px) {
+            max-width: 75%;
+        }
+
+        @media (min-width: 320px) {
+            max-width: 75%;
+        }
+    }
+
+    .textH6 {
+        color: #48464C;
+    }
+
+    .textRegular {
+        color: #48464C;
+    }
+}
