@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { RegisterInput, LoginInput } from "../types/Auth.types";
 import { getUserAccount, getUserEmail } from "../repository/Auth.repository";
-import { NextApiResponse } from "next";
 
 const registerService = async ({
 	email,
@@ -73,18 +72,12 @@ const loginService = async ({ email, password }: LoginInput) => {
 					{ expiresIn: "7d" }
 				);
 
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				function setCookies(res: NextApiResponse) {
-					res.setHeader("Set-Cookie", [
-						`accessToken=${accessToken}; HttpOnly; Secure; SameSite=None; Max-Age=${1 * 60 * 60}`,
-						`refreshToken=${refreshToken}; HttpOnly; Secure; Max-Age=${7 * 24 * 60 * 60}`,
-					]);
-				}
-
 				return {
 					status: 200,
 					message: "login successful",
 					data: user,
+					accessToken,
+					refreshToken,
 				};
 			} else {
 				return {
