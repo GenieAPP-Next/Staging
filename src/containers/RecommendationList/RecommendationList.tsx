@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-=======
 /* eslint-disable @typescript-eslint/no-misused-promises */
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import SwiperComponent from "@/components/SwiperComponent/SwiperComponent";
 import RecommendationCard from "@/components/Card/RecommendationCard/RecommendationCard";
 import { Box, Button, Divider, Typography } from "@mui/material";
@@ -17,109 +13,88 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import AddGiftCard from "@/components/AddGift/AddGiftCard";
 import { AddGift } from "@/components/AddGift/type";
 import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
+import { useParams } from "next/navigation";
 import axios from "axios";
 
 interface RecommendationListProps {
   data: Array<{
-<<<<<<< HEAD
-    gift_id: string;
-    name: string;
-    price: number;
-    image_url: string;
-    username?: string;
-=======
     urlLink: string;
     id: string;
     itemName: string;
     price: number;
     itemImage: string;
     creator: string;
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
   }>;
 }
 
-export interface Item {
-  gift_id: string;
-  name: string;
+interface Item {
+  id: string;
+  itemName: string;
   price: number;
-<<<<<<< HEAD
-  image_url: string;
-  username?: string;
-  url_link?: string;
-=======
   itemImage: string;
-  creator: string;
-  isRecommendation: boolean;
-  urlLink: string;
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
+  creator?: string;
+  isRecommendation?: boolean;
+  urlLink?: string;
 }
 
 const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
   const theme = useTheme();
   const params = useParams<{ groupName: string }>();
-  const [giftItemsLocal, setGiftItemsLocal] = useState<Item[]>([]);
   const [giftItems, setGiftItems] = useState<Item[]>([]);
+  const [giftItemsLocal, setGiftItemsLocal] = useState<Item[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
-<<<<<<< HEAD
-
-  const fetchRecommendedGift = async () => {
-    try {
-      const response = await axios.get(`/api/recommendation/${params.groupName}`);
-      console.log(response);
-      const recommendedGift: Item[] = response.data.data;
-      setGiftItems(recommendedGift);
-    } catch (error: any) {
-      alert("Error fetching recommended gifts:" + error);
-    }
-  };
-=======
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
 
   useEffect(() => {
-    fetchRecommendedGift().catch((error) => {
-      console.error("Failed to fetch recommended gifts:", error);
-    });
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/recommendation/${params.groupName}`);
+        const data = response.data.data;
+        console.log(data);
+
+        const giftData: Item[] = data.map((item: any) => ({
+          id: item.gift_id.toString(),
+          itemName: item.name,
+          price: parseFloat(item.price),
+          itemImage: item.image_url,
+          creator: item.user.username,
+          isRecommendation: true,
+          urlLink: "" /*nanti ubah ini, ubah endpointnya dulu*/,
+        }));
+
+        setGiftItems(giftData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
 
     const storedItems: Item[] = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
     setGiftItemsLocal(storedItems);
   }, []);
+  console.log(giftItems);
+  console.log(giftItemsLocal);
 
   const handleAdd = (id: string) => {
     const existingGiftItems: Item[] = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
 
-<<<<<<< HEAD
-    const selectedItem = data.find((item) => item.gift_id === id);
-    if (selectedItem && !existingGiftItems.some((item: Item) => item.gift_id === id)) {
-      const updatedGifts: Item[] = [...existingGiftItems, selectedItem];
-      setGiftItemsLocal(updatedGifts);
-=======
     const selectedItem = data.find((item) => item.id === id);
-    if (
-      selectedItem &&
-      !existingCartItems.some((item: Item) => item.id === id)
-    ) {
+    if (selectedItem && !existingGiftItems.some((item: Item) => item.id === id)) {
       const updatedGifts: Item[] = [
-        ...existingCartItems,
+        ...existingGiftItems,
         {
           ...selectedItem,
           isRecommendation: true,
           urlLink: selectedItem.urlLink,
         }, // Menandai sebagai rekomendasi
       ];
-      setGiftItems(updatedGifts);
-      console.log("Added recommendation gift:", selectedItem);
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
+
       localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
+      setGiftItemsLocal(updatedGifts);
+      console.log("Added recommendation gift:", selectedItem);
     }
   };
 
-<<<<<<< HEAD
-  const handleAddNewGift = (gift: Item) => {
-    const existingGiftItems: Item[] = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
-
-    const updatedGifts: Item[] = [...existingGiftItems, gift];
-    setGiftItemsLocal(updatedGifts);
-=======
   const handleAddNewGift = (gift: AddGift) => {
     // Pastikan image telah diupload dan URL tersedia
     if (!gift.itemImage) {
@@ -143,8 +118,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
     console.log("Added new gift:", newGift);
 
     const updatedGifts = [...giftItems, newGift];
-    setGiftItems(updatedGifts);
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
+    setGiftItemsLocal(updatedGifts);
     localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
     setDrawerOpen(false);
   };
@@ -184,8 +158,6 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
     }
   };
 
-  console.log(giftItems);
-
   return (
     <>
       <Typography
@@ -200,23 +172,15 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
       </Typography>
       <SwiperComponent>
         {giftItems.map((item) => (
-          <div key={item.gift_id}>
+          <div key={item.id}>
             <RecommendationCard
-<<<<<<< HEAD
-              gift_id={item.gift_id}
-              name={item.name}
+              id={item.id}
+              itemName={item.itemName}
               price={item.price}
-              image_url={item.image_url}
-              onClick={() => {
-                handleAdd(item.gift_id);
-              }}
-=======
-              {...item}
-              src={item.itemImage}
+              itemImage={item.itemImage}
               onClick={() => {
                 handleAdd(item.id);
-              }} // Updated this line
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
+              }}
             />
           </div>
         ))}
@@ -280,19 +244,15 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
             marginBottom: "15px",
           }}
         >
-<<<<<<< HEAD
           {giftItemsLocal.map((item) => (
-            <Box key={item.gift_id}>
-=======
-          {giftItems.map((item) => (
             <Box key={item.id}>
->>>>>>> 13c88391574a7c42e1875f1b970e608549aeaa2d
               <ListCard
-                gift_id={item.gift_id}
-                name={item.name}
+                id={item.id}
+                itemName={item.itemName}
                 price={item.price}
-                image_url={item.image_url}
-                username={item.username}
+                itemImage={item.itemImage}
+                creator={item.creator}
+                urlLink={item.urlLink}
               />
             </Box>
           ))}
