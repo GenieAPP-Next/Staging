@@ -38,7 +38,7 @@ interface AddGift {
 const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
   const theme = useTheme();
   const [giftItems, setGiftItems] = useState<Item[]>([]);
-  const [drawerOpen, setDrawerOpen] = useState(false); // State for drawer open/close
+  const [drawerOpen, setDrawerOpen] = useState(false); 
 
   useEffect(() => {
     const storedItems: Item[] = JSON.parse(
