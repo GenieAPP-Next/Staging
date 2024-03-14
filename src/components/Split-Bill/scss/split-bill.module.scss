@@ -12,6 +12,14 @@
   // }
 }
 
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 93.5vh;
+}
+
+
 .content {
   display: flex;
   flex-direction: column;

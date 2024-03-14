@@ -7,8 +7,11 @@ export const avatarColors = [
   "#9B4444",
 ];
 
-// Function to get a color index based on a string
 export const getColorIndex = (str: string, arrayLength: number): number => {
+  if (!str || typeof str !== "string" || str.length === 0) {
+    return 0;
+  }
+
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = (hash + str.charCodeAt(i)) % arrayLength;

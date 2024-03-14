@@ -5,6 +5,7 @@ export const items = [
     price: 1900000,
     itemImage: "/img/img01.png",
     urlLink: "https://www.example.com/nike-air-max",
+    creator: "Creator Name",
   },
   {
     id: "2",
@@ -12,6 +13,7 @@ export const items = [
     price: 2345000,
     itemImage: "/img/img02.png",
     urlLink: "https://www.example.com/daniel-wellington",
+    creator: "Creator Name",
   },
   {
     id: "3",
@@ -19,6 +21,7 @@ export const items = [
     price: 4500000,
     itemImage: "/img/img03.png",
     urlLink: "https://www.example.com/calvin-klein-handbag",
+    creator: "Creator Name",
   },
   {
     id: "4",
@@ -26,5 +29,6 @@ export const items = [
     price: 1999000,
     itemImage: "/img/img04.png",
     urlLink: "https://www.example.com/hush-puppies-flat-shoes",
+    creator: "Creator Name",
   },
 ];
