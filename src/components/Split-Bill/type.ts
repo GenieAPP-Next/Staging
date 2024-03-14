@@ -1,10 +1,16 @@
-export interface GiftItem {
-  name: string;
-  price: string;
+export interface Gift {
+  Gift: {
+    name: string;
+    price: string;
+  };
+  event_date: {
+    event_date: string;
+  };
 }
 
 export interface Bill {
   BillPayer: number;
+  BillPayerName: string;
   Bill: {
     total_amount: string;
     status: string;
@@ -29,7 +35,7 @@ export interface SplitBills {
 }
 
 export interface SplitBillData {
-  Gift: GiftItem;
+  Gift: Gift;
   Bill: Bill;
   SplitBills: SplitBills;
 }
