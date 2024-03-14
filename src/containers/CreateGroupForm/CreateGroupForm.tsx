@@ -17,16 +17,9 @@ import axios from "axios";
 import { Member } from "@/components/CreateGroup/type";
 
 const CreateGroupForm: React.FC = () => {
-  const [name, setName] = useState(
-    () => localStorage.getItem("createGroupName") ?? ""
-  );
-  const [selectedCategory, setSelectedCategory] = useState(
-    () => localStorage.getItem("createGroupCategory") ?? ""
-  );
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(() => {
-    const storedDate = localStorage.getItem("createGroupDate");
-    return storedDate ? dayjs(storedDate) : null;
-  });
+  const [name, setName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
   const [selectedBillPayerId, setSelectedBillPayerId] = useState<string | null>(
     null
   );
@@ -38,6 +31,20 @@ const CreateGroupForm: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+    // Load stored data from localStorage on client-side mount
+    const storedName = localStorage.getItem("createGroupName");
+    const storedCategory = localStorage.getItem("createGroupCategory");
+    const storedDate = localStorage.getItem("createGroupDate");
+    const storedMembers = localStorage.getItem("addedMembers");
+
+    if (storedName) setName(storedName);
+    if (storedCategory) setSelectedCategory(storedCategory);
+    if (storedDate) setSelectedDate(dayjs(storedDate));
+    if (storedMembers) setMembers(JSON.parse(storedMembers));
+  }, []);
+
+  useEffect(() => {
+    // Sync state with localStorage on changes
     localStorage.setItem("createGroupName", name);
     localStorage.setItem("createGroupCategory", selectedCategory);
     if (selectedDate) {
@@ -83,6 +90,7 @@ const CreateGroupForm: React.FC = () => {
       setSnackbarOpen(true);
       return;
     }
+
     const formattedDate = selectedDate
       ? selectedDate.format("YYYY-MM-DD")
       : null;
@@ -108,27 +116,20 @@ const CreateGroupForm: React.FC = () => {
         return;
       }
 
-      for (const member of members) {
-        const role =
-          member.user_id === selectedBillPayerId ? "billPayer" : "member";
-        await axios.post("/api/addMember", {
-          groupId,
-          userId: member.user_id,
-          role,
-        });
-      }
+      // At this point, group is created successfully. Store the group_id in localStorage
+      localStorage.setItem("group_id", groupId);
 
-      localStorage.removeItem("createGroupName");
-      localStorage.removeItem("createGroupCategory");
-      localStorage.removeItem("createGroupDate");
-      localStorage.removeItem("addedMembers");
-
+      // Proceed to the member addition page
       setSuccessSnackbarOpen(true);
       setTimeout(() => {
         router.push(`/${name}/gift`);
-      }, 1500);
+      }, 1000);
     } catch (error) {
-      console.error("Error creating group or adding members:", error);
+      console.error(
+        "Error creating group or navigating to add members:",
+        error
+      );
+      setSnackbarOpen(true);
     } finally {
       setIsLoading(false);
     }
