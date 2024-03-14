@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import GiftItem from "@/components/Voting/GiftItem";
 import {
   Box,
@@ -27,6 +28,7 @@ interface Gift {
 }
 
 const Voting: React.FC = () => {
+  const router = useRouter();
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [allMembersVoted, setAllMembersVoted] = useState(false);
   const [votedItemId, setVotedItemId] = useState<number | null>(null);
@@ -37,52 +39,73 @@ const Voting: React.FC = () => {
     "success"
   );
 
+  const checkAllMembersVoted = (giftsFromResponse: Gift[]) => {
+    const allUserIds = giftsFromResponse.flatMap((gift) => gift.user);
+    const uniqueUserIds = new Set(allUserIds);
+    // Convert the total_member to a string before passing it to parseInt
+    const totalMember = giftsFromResponse[0]?.total_member.toString();
+    return uniqueUserIds.size === parseInt(totalMember, 10);
+  };
+
+  const fetchAndProcessGifts = async (groupId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`/api/getVote/${groupId}`);
+      if (response.data?.data && Array.isArray(response.data.data.data.Gift)) {
+        const giftsFromResponse = response.data.data.data.Gift.map(
+          (gift: Gift) => ({
+            ...gift,
+            votes: gift.user.length,
+          })
+        );
+        setGifts(giftsFromResponse);
+        setAllMembersVoted(checkAllMembersVoted(giftsFromResponse));
+      } else {
+        console.error("Unexpected response format:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching voting data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const groupId = localStorage.getItem("group_id");
     if (groupId) {
-      const fetchGiftsData = async () => {
-        setIsLoading(true);
-        try {
-          const response = await axios.get(`/api/getVote/${groupId}`);
-          if (
-            response.data?.data &&
-            Array.isArray(response.data.data.data.Gift)
-          ) {
-            const giftsFromResponse = response.data.data.data.Gift.map(
-              (gift: Gift) => ({
-                ...gift,
-                votes: gift.user.length,
-              })
-            );
-
-            setGifts(giftsFromResponse);
-
-            const allUserIds = giftsFromResponse.flatMap(
-              (gift: Gift) => gift.user
-            );
-            const uniqueUserIds = new Set(allUserIds);
-
-            const allVoted =
-              uniqueUserIds.size ===
-              parseInt(giftsFromResponse[0]?.total_member, 10);
-            setAllMembersVoted(allVoted);
-
-            console.log("Unique User IDs Count:", uniqueUserIds.size);
-            console.log("Total Member:", giftsFromResponse[0]?.total_member);
-            console.log("All Members Voted:", allVoted);
-          } else {
-            console.error("Unexpected response format:", response.data);
-          }
-        } catch (error) {
-          console.error("Error fetching voting data:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      void fetchGiftsData();
+      void fetchAndProcessGifts(groupId);
     }
   }, []);
+
+  const handleVote = async (giftId: number) => {
+    const groupId = localStorage.getItem("group_id");
+    const userId = localStorage.getItem("user_id");
+
+    if (!groupId || !userId) {
+      setSnackbarMessage("Missing group or user ID information.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    try {
+      await axios.post("/api/voteGift", {
+        groupId,
+        giftId,
+        userId,
+      });
+      setVotedItemId(giftId);
+      setSnackbarMessage("Successfully voted for the gift!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      await fetchAndProcessGifts(groupId); // Refresh data and check voting status
+    } catch (error: any) {
+      console.error("Error in vote submission:", error);
+      setSnackbarMessage(error.message || "An unexpected error occurred.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
 
   const handleSnackbarClose = (
     event: React.SyntheticEvent | Event,
@@ -98,39 +121,31 @@ const Voting: React.FC = () => {
     setSnackbarOpen(false);
   };
 
-  const handleVote = async (giftId: number) => {
-    const storedGroupId = localStorage.getItem("group_id");
-    const storedUserId = localStorage.getItem("user_id");
+  const handleSplitBill = async () => {
+    const groupId = localStorage.getItem("group_id");
+    const groupName = localStorage.getItem("createGroupName"); // group name from localStorage
 
-    const groupId = storedGroupId ? parseInt(storedGroupId, 10) : null;
-    const userId = storedUserId ? parseInt(storedUserId, 10) : null;
-
-    if (!groupId || !userId) {
-      console.error("Missing group ID or user ID from local storage.");
-      setSnackbarMessage("Unable to retrieve group or user information.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+    if (!groupId || !groupName || gifts.length === 0) {
+      console.error("Missing group ID, group name, or no gifts available.");
       return;
     }
 
-    // Proceed with the vote submission
-    try {
-      const response = await axios.post("/api/voteGift", {
-        groupId,
-        giftId,
-        userId,
-      });
+    // Find the most voted gift
+    const mostVotedGift = gifts.reduce((prev, current) => {
+      return prev.votes > current.votes ? prev : current;
+    });
 
-      console.log(response.data);
-      setSnackbarMessage("Successfully voted for the gift!");
-      setSnackbarSeverity("success");
-      setVotedItemId(giftId);
-    } catch (error: any) {
-      console.error("Error in vote submission:", error);
-      setSnackbarMessage(error.message || "An unexpected error occurred.");
-      setSnackbarSeverity("error");
-    } finally {
-      setSnackbarOpen(true);
+    try {
+      const response = await axios.post(
+        `/api/splitBill/${groupId}/${mostVotedGift.gift_id}`
+      );
+      console.log("Split Bill Response:", response.data);
+
+      // Navigate to split bill page
+      router.push(`/${groupName}/split-bill`);
+    } catch (error) {
+      console.error("Error in Split Bill:", error);
+      // Handle error - Show error message
     }
   };
 
@@ -192,6 +207,7 @@ const Voting: React.FC = () => {
             variant="contained"
             fullWidth
             sx={{ borderRadius: "14px" }}
+            onClick={handleSplitBill}
             disabled={!allMembersVoted}
           >
             Split Bill
