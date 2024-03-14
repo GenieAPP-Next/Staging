@@ -16,7 +16,7 @@ const SplitBill = async ({ groupId }: splitBill) => {
       attributes: ["price"],
     });
     const totalAmountGift = priceGift?.getDataValue("price") as number;
-    const splitBillAmount = Math.floor(totalAmountGift / member);
+    const splitBillAmount = Math.ceil(totalAmountGift / member);
     return splitBillAmount;
   } catch (error) {
     console.error("Error splitting bill:", error);

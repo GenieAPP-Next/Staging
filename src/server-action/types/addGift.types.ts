@@ -7,3 +7,11 @@ export interface addGift {
   userId: number;
   categoryId: number;
 }
+export interface addGiftbyCategory {
+  categoryId: number;
+  giftId: number;
+}
+export interface getGiftfromrecommendation {
+  categoryId: number;
+  giftId: number;
+}
