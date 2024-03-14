@@ -8,12 +8,13 @@ export interface CardProps {
   id: string;
   itemName: string;
   price: number;
-  src: string;
+  itemImage: string;
   creator?: string;
+  urlLink?: string;
   onClick?: (id: string) => void;
 }
 
-const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onClick }) => {
+const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, itemImage, onClick }) => {
   const theme = useTheme();
   const formattedPrice = price.toLocaleString("id-ID");
 
@@ -43,12 +44,12 @@ const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onC
       >
         {/* add alternate image if there are no image or still fetching image data */}
         <Image
-          src={src}
-          alt={`image for ${itemName}`}
-          layout="cover"
+          src={itemImage}
+          alt={`Gift image for ${itemName}`}
+          layout='cover'
           width={135}
           height={90}
-          objectFit="cover"
+          objectFit='cover'
           style={{ borderRadius: "12px 12px 0 0" }}
         />
       </Box>
@@ -88,7 +89,7 @@ const RecommendationCard: React.FC<CardProps> = ({ id, itemName, price, src, onC
             width: 40,
             height: 40,
           }}
-          aria-label="add"
+          aria-label='add'
           onClick={() => {
             onClick && onClick(id);
           }}
