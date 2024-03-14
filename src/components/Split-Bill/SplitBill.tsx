@@ -14,24 +14,34 @@ import { SplitBillData } from "./type";
 export default function SplitBill() {
   const [data, setData] = useState<SplitBillData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const groupId = 31;
-  const userId = 7;
+  const [groupId, setGroupId] = useState<number>(0);
+  const [userId, setUserId] = useState<number>(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `/api/getSplitBill/${groupId}/${userId}`
-        );
-        setData(response.data.data.data);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    // Retrieve groupId and userId from localStorage
+    const storedGroupId = parseInt(localStorage.getItem("group_id") ?? "0", 10);
+    const storedUserId = parseInt(localStorage.getItem("user_id") ?? "0", 10);
+    setGroupId(storedGroupId);
+    setUserId(storedUserId);
+  }, []);
 
-    void fetchData();
+  useEffect(() => {
+    if (groupId > 0 && userId > 0) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `/api/getSplitBill/${groupId}/${userId}`
+          );
+          setData(response.data.data.data);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      void fetchData();
+    }
   }, [groupId, userId]);
 
   const originalAmountDue = data?.Bill?.Bill?.total_amount
@@ -39,9 +49,12 @@ export default function SplitBill() {
     : 0;
 
   const billPayerId = data?.Bill?.BillPayer ?? 0;
+  const billPayerName = data?.Bill?.BillPayerName ?? "";
   const totalAmount = data?.Bill?.Bill?.total_amount
     ? parseFloat(data.Bill.Bill.total_amount)
     : 0;
+
+  const eventDate = data?.Gift?.event_date?.event_date ?? "";
 
   if (isLoading) {
     return (
@@ -55,10 +68,12 @@ export default function SplitBill() {
     <section id="split-bill">
       <div className={classes.container}>
         <div className={classes.content}>
-          {data?.Gift && <GiftItemLogistics gift={data.Gift} />}
+          {data?.Gift && (
+            <GiftItemLogistics gift={data.Gift.Gift} eventDate={eventDate} />
+          )}
           {data?.Bill?.BillPayer && (
             <BillPayerLogistics
-              billPayerName={"Kang Bayar"} // replace with actual name
+              billPayerName={billPayerName}
               billPayerId={billPayerId}
               totalAmount={totalAmount}
             />
