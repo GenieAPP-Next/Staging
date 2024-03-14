@@ -6,4 +6,5 @@ export interface addGift {
   urlLink: string;
   userId: number;
   categoryId: number;
+  isRecommendation?: boolean;
 }

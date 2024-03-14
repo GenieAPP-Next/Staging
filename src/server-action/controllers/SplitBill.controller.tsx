@@ -1,35 +1,29 @@
-import { NextRequest, NextResponse } from "next/server";
-
-export const splitBill = async (req: NextRequest, res: NextResponse) => {
-    const body = await req.text(); // Use text() instead of json()
-    const parsedBody = body ? JSON.parse(body) : {};
-    console.log(parsedBody);
+import { NextResponse } from "next/server";
+import { Createbill as Bill } from "../services/Createbill.service";
+import { SplitBill as Split } from "../services/SplitBill.service";
+export const splitBill = async (groupId: number, giftId: number) => {
+  try {
+    const createBill = await Bill({ groupId, giftId });
+    const SplitBill = await Split({ groupId, giftId });
     return NextResponse.json(
-        {
-            success: true,
-            message: parsedBody,
+      {
+        success: true,
+        message: "Success Split bill",
+        data: {
+          createbill: createBill,
+          splitBill: SplitBill,
         },
-        { status: 200 }
+      },
+      { status: 200 }
     );
-
-    // try {
-    //     const { email, username, password } = body;
-
-
-    //     return NextResponse.json(
-    //         {
-    //             success: true,
-    //             message: body,
-    //         },
-    //         { status: 200 }
-    //     );
-    // } catch (error: any) {
-    //     return NextResponse.json(
-    //         {
-    //             success: false,  // Change success to false in case of an error
-    //             message: error.message,
-    //         },
-    //         { status: 400 }  // Change status to 400 for a bad request
-    //     );
-    // }
-}
+  } catch (error: any) {
+    console.error("Error Split bill:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message,
+      },
+      { status: 400 }
+    );
+  }
+};

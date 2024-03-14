@@ -1,23 +1,27 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-misused-promises */
+"use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
-import { Box, IconButton, InputAdornment, Link as MuiLink, Typography, ThemeProvider } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  Typography,
+  ThemeProvider,
+} from "@mui/material";
 import { Visibility, VisibilityOff, ArrowBack } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useRouter } from 'next/navigation';
-
-
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import theme from "@/theme/theme";
 
-const initialValues = {
-  email: "",
-  password: "",
-};
+// const initialValues = {
+//   email: "",
+//   password: "",
+// };
 
 function ResetForm() {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -27,21 +31,28 @@ function ResetForm() {
     password: Yup.string().required("Password is required"),
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: async (values) => {
       try {
         await validationSchema.validate(values, { abortEarly: false });
         return { values, errors: {} };
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
-          const formErrors = error.inner.reduce((acc, cur) => {
-            acc[cur.path as any] = { message: cur.message };
-            return acc;
-          }, {} as Record<string, any>);
+          const formErrors = error.inner.reduce<Record<string, any>>(
+            (acc, cur) => {
+              acc[cur.path as any] = { message: cur.message };
+              return acc;
+            },
+            {}
+          );
           return { values, errors: formErrors };
         } else {
-          console.error('An unexpected error occurred:', error);
-          throw new Error('An unexpected error occurred');
+          console.error("An unexpected error occurred:", error);
+          throw new Error("An unexpected error occurred");
         }
       }
     },
@@ -59,9 +70,13 @@ function ResetForm() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
 
@@ -75,22 +90,36 @@ function ResetForm() {
         minHeight="100vh"
       >
         <Box mt={7}>
-          <Box display="flex" alignItems="left" >
-            <IconButton onClick={() => router.push('/login')}>
+          <Box display="flex" alignItems="left">
+            <IconButton
+              onClick={() => {
+                router.push("/login");
+              }}
+            >
               <ArrowBack />
             </IconButton>
-            <Typography variant="h6" color="textPrimary" alignItems="center" justifyContent="center" textAlign="center" gutterBottom>
+            <Typography
+              variant="h6"
+              color="textPrimary"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+              gutterBottom
+            >
               Forgot Password?
             </Typography>
           </Box>
-          <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", maxWidth: "300px" }}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ width: "100%", maxWidth: "300px" }}
+          >
             <TextField
               fullWidth
-              label='New Password'
+              label="New Password"
               type={showPassword ? "text" : "new password"}
-              variant='outlined'
-              margin='normal'
-              size='small'
+              variant="outlined"
+              margin="normal"
+              size="small"
               InputLabelProps={{
                 style: { fontSize: "14px" },
               }}
@@ -98,20 +127,25 @@ function ResetForm() {
               error={!!errors.newPassword}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge='end'>
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
-              }} />
+              }}
+            />
             <TextField
               fullWidth
-              label='Confirm New Password'
+              label="Confirm New Password"
               type={showPassword ? "text" : "new password"}
-              variant='outlined'
-              margin='normal'
-              size='small'
+              variant="outlined"
+              margin="normal"
+              size="small"
               InputLabelProps={{
                 style: { fontSize: "14px" },
               }}
@@ -119,19 +153,29 @@ function ResetForm() {
               error={!!errors.confirmNewPassword}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge='end'>
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
-              }} />
+              }}
+            />
             <Button
-              type='submit'
-              color='primary'
-              variant='contained'
+              type="submit"
+              color="primary"
+              variant="contained"
               disabled={isSubmitting}
-              style={{ width: "100%", borderRadius: 15, marginTop: 25, fontSize: 12 }}
+              style={{
+                width: "100%",
+                borderRadius: 15,
+                marginTop: 25,
+                fontSize: 12,
+              }}
             >
               {isSubmitting ? <CircularProgress /> : "Submit"}
             </Button>
@@ -143,4 +187,3 @@ function ResetForm() {
 }
 
 export default ResetForm;
-

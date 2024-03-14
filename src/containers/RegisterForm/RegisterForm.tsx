@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -46,7 +48,7 @@ function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<RegisterFormData>({
     resolver: async (values) => {
       try {
         await validationSchema.validate(values, { abortEarly: false });
@@ -101,7 +103,9 @@ function RegisterForm() {
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
   };
-  const handleMouseDownPassword = (event) => {
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
   };
 

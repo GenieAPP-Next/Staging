@@ -1,21 +1,28 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+
+import React, { useState, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
-import { Item } from "@/containers/RecommendationList/RecommendationList";
+import { AddGift } from "./type";
 
 interface AddGiftCardProps {
-  onAddGift: (gift: Item) => any;
+  onAddGift: (gift: AddGift) => any;
 }
 
 const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
-  const [formData, setFormData] = useState<Item>({
-    gift_id: "",
-    name: "",
-    price: 0,
-    image_url: "",
-    url_link: "",
+  const [formData, setFormData] = useState<AddGift>({
+    id: "",
+    itemName: "",
+    price: "",
+    itemImage: "",
+    src: "",
   });
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [uploadedImageName, setUploadedImageName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,20 +30,60 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
     formattedValue = formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "price" ? parseFloat(formattedValue) : value,
+      [name]: name === "price" ? ` ${formattedValue}` : value,
     }));
   };
 
+  const handleImageUpload = async () => {
+    // console.log("File input ref:", fileInputRef.current);
+    // console.log("Files:", fileInputRef.current?.files);
+
+    // Check if a file is selected
+    if (fileInputRef.current?.files?.[0]) {
+      const file = fileInputRef.current.files[0];
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // console.log("Attempting to upload file:", file);
+
+      try {
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        // console.log("Response from imgBB:", data);
+
+        if (data.success && data.data?.url) {
+          setUploadedImageUrl(data.data.url);
+          setUploadedImageName(data.data.image.filename);
+          setFormData((prevData) => ({
+            ...prevData,
+            itemImage: data.data.url,
+          }));
+        } else {
+          console.error("Failed to retrieve image URL from imgBB response");
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    } else {
+      console.error("No image selected for upload");
+    }
+  };
+
   const handleAdd = () => {
-    const gift_id = Math.random().toString(36).substr(2, 9);
-    const newGift: Item = { ...formData, gift_id };
+    const id = Math.random().toString(36).substr(2, 9);
+    const newGift: AddGift = { ...formData, id };
     onAddGift(newGift);
     setFormData({
-      gift_id: "",
-      name: "",
-      price: 0,
-      image_url: "",
-      url_link: "",
+      id: "",
+      itemName: "",
+      price: " ",
+      itemImage: "",
+      src: "",
     });
   };
 
@@ -46,10 +93,15 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
         fullWidth
         label='Name'
         variant='outlined'
-        name='name'
-        value={formData.name}
+        name='itemName'
+        value={formData.itemName}
         onChange={handleChange}
-        sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
+        sx={{
+          marginBottom: "12px",
+          width: "375px",
+          marginX: "auto",
+          fontcolor: "grey",
+        }}
       />
       <TextField
         fullWidth
@@ -64,18 +116,23 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       <TextField
         fullWidth
         label='Image'
+        focused
         variant='outlined'
-        name='image_url'
-        value={formData.image_url}
-        onChange={handleChange}
+        name='itemImage'
+        type='file'
+        inputRef={fileInputRef}
+        onChange={handleImageUpload}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
+      {/* {uploadedImageUrl && uploadedImageName && (
+        <Typography>{uploadedImageName}</Typography>
+      )} */}
       <TextField
         fullWidth
         label='Marketplace Link'
         variant='outlined'
-        name='url_link'
-        value={formData.url_link}
+        name='src'
+        value={formData.src}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />

@@ -33,7 +33,7 @@ export const totalVote = async ({ giftId }: Countvote) => {
 };
 export const details = async ({ groupId }: Detailgroup) => {
   try {
-    const detailGift = await Gifts.findOne({
+    const detailGift = await Gifts.findAll({
       where: { group_id: groupId },
     });
     return detailGift;
