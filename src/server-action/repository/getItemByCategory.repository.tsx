@@ -25,7 +25,17 @@ export const getItemsByCategory = async (categoryId: number) => {
           required: true,
         },
       ],
-      attributes: ["user_id", "gift_id", "name", "price", "image_url", "category_id", "createdAt", "updatedAt"],
+      attributes: [
+        "user_id",
+        "gift_id",
+        "name",
+        "price",
+        "image_url",
+        "url_link",
+        "category_id",
+        "createdAt",
+        "updatedAt",
+      ],
     });
 
     return items;
