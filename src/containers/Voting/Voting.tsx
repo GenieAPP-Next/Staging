@@ -151,16 +151,19 @@ const Voting: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "93.5vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
+      <main>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "93.5vh",
+            backgroundColor: "#fefefe",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </main>
     );
   }
 
