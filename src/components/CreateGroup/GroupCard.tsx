@@ -4,6 +4,7 @@ import { getInitials } from "../utils/initialUtils";
 import { GroupCardProps } from "./type";
 
 const GroupCard: React.FC<GroupCardProps> = ({
+  onGroupClick,
   groupName,
   category,
   memberCount,
@@ -11,7 +12,10 @@ const GroupCard: React.FC<GroupCardProps> = ({
   avatarColor,
 }) => {
   return (
-    <Card sx={{ display: "flex", marginBottom: 2 }}>
+    <Card
+      sx={{ display: "flex", marginBottom: 2, cursor: "pointer" }}
+      onClick={onGroupClick}
+    >
       <CardContent sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
         <Avatar sx={{ marginRight: 2, backgroundColor: avatarColor }}>
           {getInitials(groupName)}
