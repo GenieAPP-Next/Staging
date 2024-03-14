@@ -16,7 +16,7 @@ const SplitBill = async ({ groupId }: splitBill) => {
       attributes: ["price"],
     });
     const totalAmountGift = priceGift?.getDataValue("price") as number;
-    const splitBillAmount = totalAmountGift / member;
+    const splitBillAmount = Math.floor(totalAmountGift / member);
     return splitBillAmount;
   } catch (error) {
     console.error("Error splitting bill:", error);
@@ -26,15 +26,6 @@ const SplitBill = async ({ groupId }: splitBill) => {
 
 export const PostSplitBill = async ({ giftId, groupId }: postSplitBill) => {
   try {
-    // const findGiftId = await Gifts.findOne({
-    //   where: {
-    //     group_id: groupId,
-    //   },
-    //   attributes: ["gift_id"],
-    // });
-
-    // const giftId = findGiftId?.getDataValue("gift_id") as number;
-
     const findBillId = await Bills.findOne({
       where: {
         gift_id: giftId,

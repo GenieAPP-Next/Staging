@@ -7,6 +7,8 @@ import {
   getSplitBills,
 } from "../types/getSplitBill.type";
 import GroupMembers from "@/models/GroupMember.model";
+import Groups from "@/models/Groups.model";
+import Users from "@/models/Users.model";
 export const getGift = async ({ groupId }: getGiftItem) => {
   try {
     const findBillId = await BillSplits.findOne({
@@ -29,7 +31,17 @@ export const getGift = async ({ groupId }: getGiftItem) => {
       },
       attributes: ["name", "price"],
     });
-    return getGiftItem;
+    const eventdate = await Groups.findOne({
+      where: {
+        group_id: groupId,
+      },
+      attributes: ["event_date"],
+    });
+    const Result = {
+      Gift: getGiftItem,
+      event_date: eventdate,
+    };
+    return Result;
   } catch (error) {
     console.error("Error Get Gift Item:", error);
     throw error;
@@ -38,11 +50,11 @@ export const getGift = async ({ groupId }: getGiftItem) => {
 export const getBill = async ({ groupId }: billsInput) => {
   try {
     const findBillPayer = await GroupMembers.findOne({
-        where:{
-            group_id: groupId,
-            role: "billPayer"
-        },
-        attributes: ["user_id"]
+      where: {
+        group_id: groupId,
+        role: "billPayer",
+      },
+      attributes: ["user_id"],
     });
     const userId = findBillPayer?.get("user_id") as number;
     const findBillId = await BillSplits.findOne({
@@ -59,9 +71,9 @@ export const getBill = async ({ groupId }: billsInput) => {
       attributes: ["total_amount", "status"],
     });
     const result = {
-        BillPayer: userId,
-        Bill: Getbill
-    }
+      BillPayer: userId,
+      Bill: Getbill,
+    };
     return result;
   } catch (error) {
     console.error("Error get bill:", error);
@@ -72,21 +84,32 @@ export const getSplitBillbyuserId = async ({
   groupId,
   userId,
 }: getSplitBills) => {
-    try{
-      const getAllSplitbills = await BillSplits.findAll({
-       where:{
-           group_id: groupId,
-       }
-      });
-      const ownerAccount = getAllSplitbills.find((splitBill) => splitBill.get("user_id") === userId);
-      const memberGroup = getAllSplitbills.filter((splitBill) => splitBill.get("user_id") !== userId);
-  
-      const result = {
-        owner: ownerAccount,
-        members: memberGroup,
-      };
-  
-     return result;
+  try {
+    const getAllSplitbills = await BillSplits.findAll({
+      where: {
+        group_id: groupId,
+      },
+      include: [
+        {
+          model: Users,
+          attributes: ['username'],
+          as: 'user',
+        },
+      ],
+    });
+    const ownerAccount = getAllSplitbills.find(
+      (splitBill) => splitBill.get("user_id") === userId
+    );
+    const memberGroup = getAllSplitbills.filter(
+      (splitBill) => splitBill.get("user_id") !== userId
+    );
+
+    const result = {
+      owner: ownerAccount,
+      members: memberGroup,
+    };
+
+    return result;
   } catch (error) {
     console.error("Error get all splitBill:", error);
     throw error;
