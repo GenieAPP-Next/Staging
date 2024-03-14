@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const Addgift = async (req: NextRequest, res: NextResponse) => {
   try {
-    const { giftItems } = await req.json(); // Expecting an object with a giftItems array
+    const { giftItems } = await req.json();
 
     // If the array is empty or not present, throw an error
     if (!giftItems?.length) {
@@ -21,9 +21,7 @@ export const Addgift = async (req: NextRequest, res: NextResponse) => {
           urlLink: gift.urlLink,
           userId: gift.userId,
           categoryId: gift.categoryId,
-          // Assuming isRecommendation and recommendedGroupId are optional
           isRecommendation: gift.isRecommendation,
-          recommendedGroupId: gift.recommendedGroupId,
         })
     );
 

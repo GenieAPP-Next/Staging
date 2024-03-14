@@ -6,7 +6,6 @@ export const items = [
     itemImage: "/img/img01.png",
     urlLink: "https://www.example.com/nike-air-max",
     creator: "Creator Name",
-    urlLink: "https://www.example.com/nike-air-max",
   },
   {
     id: "2",
@@ -15,7 +14,6 @@ export const items = [
     itemImage: "/img/img02.png",
     urlLink: "https://www.example.com/daniel-wellington",
     creator: "Creator Name",
-    urlLink: "https://www.example.com/daniel-wellington",
   },
   {
     id: "3",
@@ -24,7 +22,6 @@ export const items = [
     itemImage: "/img/img03.png",
     urlLink: "https://www.example.com/calvin-klein-handbag",
     creator: "Creator Name",
-    urlLink: "https://www.example.com/calvin-klein-handbag",
   },
   {
     id: "4",
@@ -33,6 +30,5 @@ export const items = [
     itemImage: "/img/img04.png",
     urlLink: "https://www.example.com/hush-puppies-flat-shoes",
     creator: "Creator Name",
-    urlLink: "https://www.example.com/hush-puppies-flat-shoes",
   },
 ];
