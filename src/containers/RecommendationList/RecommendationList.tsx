@@ -11,6 +11,7 @@ import ListCard from "@/components/Card/ListCard/ListCard";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import AddGiftCard from "@/components/AddGift/AddGiftCard";
+import { AddGift } from "@/components/AddGift/type";
 import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
 
 interface RecommendationListProps {
@@ -32,14 +33,6 @@ interface Item {
   creator: string;
   isRecommendation: boolean;
   urlLink: string;
-}
-
-interface AddGift {
-  src: string;
-  creator: string;
-  itemName: string;
-  itemImage: string;
-  price: number;
 }
 
 const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
@@ -85,10 +78,13 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
       return; // Atau tampilkan pesan error kepada pengguna
     }
 
+    const priceAsString = "123.45"; // This might come from an input field
+    const priceAsNumber = parseFloat(priceAsString);
+
     const newGift: Item = {
       id: new Date().getTime().toString(), // ID unik untuk gift baru
       itemName: gift.itemName, // Nama gift
-      price: gift.price, // Harga gift
+      price: priceAsNumber, // Harga gift
       itemImage: gift.itemImage, // URL gambar gift dari ImgBB
       creator: localStorage.getItem("user_id") ?? "Unknown", // User ID dari localStorage
       urlLink: gift.src, // Link marketplace

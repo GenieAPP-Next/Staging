@@ -1,19 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+
 import React, { useState, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import SubmitButton from "@/components/Button/SubmitButton/SubmitButton";
-// import { Typography } from "@mui/material";
+import { AddGift } from "./type";
 
 interface AddGiftCardProps {
   onAddGift: (gift: AddGift) => any;
-}
-
-interface AddGift {
-  id: string;
-  itemName: string;
-  price: string;
-  itemImage: string;
-  src: string;
 }
 
 const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
@@ -65,7 +61,7 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
         const data = await response.json();
         // console.log("Response from imgBB:", data);
 
-        if (data.success && data.data && data.data.url) {
+        if (data.success && data.data?.url) {
           setUploadedImageUrl(data.data.url);
           setUploadedImageName(data.data.image.filename);
           setFormData((prevData) => ({

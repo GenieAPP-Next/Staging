@@ -24,7 +24,6 @@ const Creategift = async ({
       userId,
       categoryId,
       isRecommendation,
-      recommendedGroupId, // Sertakan parameter ini untuk menangani rekomendasi
     });
 
     // Pesan sukses mungkin perlu disesuaikan berdasarkan apakah ini rekomendasi atau tidak
