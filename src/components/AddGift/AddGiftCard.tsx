@@ -21,7 +21,9 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
     src: "",
   });
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const [uploadedImageName, setUploadedImageName] = useState<string | null>(null);
+  const [uploadedImageName, setUploadedImageName] = useState<string | null>(
+    null
+  );
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,10 +50,13 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       // console.log("Attempting to upload file:", file);
 
       try {
-        const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`, {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         const data = await response.json();
         // console.log("Response from imgBB:", data);
@@ -91,9 +96,9 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
     <Box sx={{ padding: "16px", textAlign: "center" }}>
       <TextField
         fullWidth
-        label='Name'
-        variant='outlined'
-        name='itemName'
+        label="Name"
+        variant="outlined"
+        name="itemName"
         value={formData.itemName}
         onChange={handleChange}
         sx={{
@@ -105,21 +110,21 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       />
       <TextField
         fullWidth
-        label='Price'
-        variant='outlined'
-        name='price'
-        type='text'
+        label="Price"
+        variant="outlined"
+        name="price"
+        type="text"
         value={formData.price}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
       <TextField
         fullWidth
-        label='Image'
+        label="Image"
         focused
-        variant='outlined'
-        name='itemImage'
-        type='file'
+        variant="outlined"
+        name="itemImage"
+        type="file"
         inputRef={fileInputRef}
         onChange={handleImageUpload}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
@@ -129,17 +134,17 @@ const AddGiftCard: React.FC<AddGiftCardProps> = ({ onAddGift }) => {
       )} */}
       <TextField
         fullWidth
-        label='Marketplace Link'
-        variant='outlined'
-        name='src'
+        label="Marketplace Link"
+        variant="outlined"
+        name="src"
         value={formData.src}
         onChange={handleChange}
         sx={{ marginBottom: "12px", width: "375px", marginX: "auto" }}
       />
       <Box sx={{ textAlign: "center" }}>
         <SubmitButton
-          variant='contained'
-          color='primary'
+          variant="contained"
+          color="primary"
           sx={{
             width: "375px",
             height: "40px",

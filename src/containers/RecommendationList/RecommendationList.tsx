@@ -13,8 +13,6 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import AddGiftCard from "@/components/AddGift/AddGiftCard";
 import { AddGift } from "@/components/AddGift/type";
 import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
-import { useParams } from "next/navigation";
-import axios from "axios";
 
 interface RecommendationListProps {
   data: Array<{
@@ -32,66 +30,44 @@ interface Item {
   itemName: string;
   price: number;
   itemImage: string;
-  creator?: string;
-  isRecommendation?: boolean;
-  urlLink?: string;
+  creator: string;
+  isRecommendation: boolean;
+  urlLink: string;
 }
 
 const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
   const theme = useTheme();
-  const params = useParams<{ groupName: string }>();
   const [giftItems, setGiftItems] = useState<Item[]>([]);
-  const [giftItemsLocal, setGiftItemsLocal] = useState<Item[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/api/recommendation/${params.groupName}`);
-        const data = response.data.data;
-        console.log(data);
-
-        const giftData: Item[] = data.map((item: any) => ({
-          id: item.gift_id.toString(),
-          itemName: item.name,
-          price: parseFloat(item.price),
-          itemImage: item.image_url,
-          creator: item.user.username,
-          isRecommendation: true,
-          urlLink: "" /*nanti ubah ini, ubah endpointnya dulu*/,
-        }));
-
-        setGiftItems(giftData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-
-    const storedItems: Item[] = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
-    setGiftItemsLocal(storedItems);
+    const storedItems: Item[] = JSON.parse(
+      localStorage.getItem("giftItems") ?? "[]"
+    );
+    setGiftItems(storedItems);
   }, []);
-  console.log(giftItems);
-  console.log(giftItemsLocal);
 
   const handleAdd = (id: string) => {
-    const existingGiftItems: Item[] = JSON.parse(localStorage.getItem("giftItems") ?? "[]");
+    const existingCartItems: Item[] = JSON.parse(
+      localStorage.getItem("giftItems") ?? "[]"
+    );
 
     const selectedItem = data.find((item) => item.id === id);
-    if (selectedItem && !existingGiftItems.some((item: Item) => item.id === id)) {
+    if (
+      selectedItem &&
+      !existingCartItems.some((item: Item) => item.id === id)
+    ) {
       const updatedGifts: Item[] = [
-        ...existingGiftItems,
+        ...existingCartItems,
         {
           ...selectedItem,
           isRecommendation: true,
           urlLink: selectedItem.urlLink,
         }, // Menandai sebagai rekomendasi
       ];
-
-      localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
-      setGiftItemsLocal(updatedGifts);
+      setGiftItems(updatedGifts);
       console.log("Added recommendation gift:", selectedItem);
+      localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
     }
   };
 
@@ -118,7 +94,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
     console.log("Added new gift:", newGift);
 
     const updatedGifts = [...giftItems, newGift];
-    setGiftItemsLocal(updatedGifts);
+    setGiftItems(updatedGifts);
     localStorage.setItem("giftItems", JSON.stringify(updatedGifts));
     setDrawerOpen(false);
   };
@@ -171,16 +147,14 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
         Recommendation
       </Typography>
       <SwiperComponent>
-        {giftItems.map((item) => (
+        {data.map((item) => (
           <div key={item.id}>
             <RecommendationCard
-              id={item.id}
-              itemName={item.itemName}
-              price={item.price}
-              itemImage={item.itemImage}
+              {...item}
+              src={item.itemImage}
               onClick={() => {
                 handleAdd(item.id);
-              }}
+              }} // Updated this line
             />
           </div>
         ))}
@@ -203,8 +177,8 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
           Your Gift
         </Typography>
         <Button
-          variant='text'
-          color='primary'
+          variant="text"
+          color="primary"
           startIcon={<AddIcon />}
           onClick={() => {
             setDrawerOpen(true);
@@ -244,15 +218,14 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
             marginBottom: "15px",
           }}
         >
-          {giftItemsLocal.map((item) => (
+          {giftItems.map((item) => (
             <Box key={item.id}>
               <ListCard
                 id={item.id}
                 itemName={item.itemName}
                 price={item.price}
-                itemImage={item.itemImage}
+                src={item.itemImage}
                 creator={item.creator}
-                urlLink={item.urlLink}
               />
             </Box>
           ))}
@@ -262,7 +235,7 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ data }) => {
         </SubmitButton>
       </Box>
       <SwipeableDrawer
-        anchor='bottom'
+        anchor="bottom"
         open={drawerOpen}
         onClose={() => {
           setDrawerOpen(false);
