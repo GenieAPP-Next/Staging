@@ -4,7 +4,7 @@ import Gifts from "@/models/Gifts.model";
 import { splitBill, postSplitBill } from "../types/splitBill.type";
 import Bills from "@/models/Bills.model";
 
-const SplitBill = async ({ groupId }: splitBill) => {
+const SplitBill = async ({ groupId,giftId }: splitBill) => {
   try {
     const member = await GroupMembers.count({
       where: { group_id: groupId },
@@ -12,12 +12,13 @@ const SplitBill = async ({ groupId }: splitBill) => {
     const priceGift = await Gifts.findOne({
       where: {
         group_id: groupId,
+        gift_id: giftId,
       },
       attributes: ["price"],
     });
     const totalAmountGift = priceGift?.getDataValue("price") as number;
-    const splitBillAmount = Math.ceil(totalAmountGift / member);
-    return splitBillAmount;
+    const splitBillAmount = totalAmountGift / member;
+    return Math.ceil(splitBillAmount);
   } catch (error) {
     console.error("Error splitting bill:", error);
     throw error;
@@ -48,7 +49,7 @@ export const PostSplitBill = async ({ giftId, groupId }: postSplitBill) => {
       const postBill = await BillSplits.create({
         bill_id: billId,
         user_id: user.get("user_id"),
-        amount: await SplitBill({ groupId }),
+        amount: await SplitBill({ groupId, giftId }),
         status,
         group_id: groupId,
       });
