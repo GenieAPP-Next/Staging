@@ -28,28 +28,28 @@ export const memberGroup = async ({ groupId }: Membergroup) => {
   }
 };
 export const detailMember = async ({ groupId }: Detailgroup) => {
-    try {
-      const giftIds = await Gifts.findAll({
-        where: { group_id: groupId },
-        attributes: ["gift_id"],
+  try {
+    const giftIds = await Gifts.findAll({
+      where: { group_id: groupId },
+      attributes: ["gift_id"],
+    });
+
+    const userMapping: Record<number, number[]> = {};
+
+    for (const gift of giftIds) {
+      const votes = await Votes.findAll({
+        where: { gift_id: gift.get("gift_id") },
+        attributes: ["user_id"],
       });
-  
-      const userMapping: Record<number, number[]> = {};
-  
-      for (const gift of giftIds) {
-        const votes = await Votes.findAll({
-          where: { gift_id: gift.get("gift_id") },
-          attributes: ["user_id"],
-        });
-  
-        const userIds = votes.map((vote) => vote.get("user_id") as number);
-        userMapping[gift.get("gift_id") as number] = userIds;
-      }
-  
-      return userMapping;
-    } catch (error) {
-      console.error("Error grouping user_id by gift:", error);
-      throw error;
+
+      const userIds = votes.map((vote) => vote.get("user_id") as number);
+      userMapping[gift.get("gift_id") as number] = userIds;
     }
-  };
-  
+
+    return userMapping;
+  } catch (error) {
+    console.error("Error grouping user_id by gift:", error);
+    throw error;
+  }
+};
+
