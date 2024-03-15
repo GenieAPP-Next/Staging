@@ -8,13 +8,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { Member, Owner } from "./type";
 
 interface SplitBillLogisticsProps {
-  owner: Owner;
+  // owner: Owner;
   members: Member[];
   originalAmountDue: number;
 }
 
 const SplitBillLogistics: React.FC<SplitBillLogisticsProps> = ({
-  owner,
+  // owner,
   members,
   originalAmountDue,
 }) => {
@@ -84,7 +84,7 @@ const SplitBillLogistics: React.FC<SplitBillLogisticsProps> = ({
 
       <div className={classes.itemCard}>
         {/* Display the owner's data */}
-        {displayUserInfo(owner)}
+        {/* {displayUserInfo(owner)} */}
 
         {/* Display the members' data */}
         {members.map((member) => displayUserInfo(member))}
