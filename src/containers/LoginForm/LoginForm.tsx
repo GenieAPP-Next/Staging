@@ -77,8 +77,10 @@ function LoginForm() {
 
       if (response.status === 200 && response.data.success) {
         const userId = response.data.data.user_id;
+        const userName = response.data.data.username;
 
-        localStorage.setItem("user_id", userId.toString());
+        localStorage.setItem("user_id", userId);
+        localStorage.setItem("username", userName);
 
         void Swal.fire(
           "Login success",

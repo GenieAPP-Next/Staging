@@ -5,22 +5,6 @@ import {
   Membergroup,
   Detailgroup,
 } from "../types/voteGift.types";
-// export const totalVote = async ({ groupId }: Detailgroup) => {
-//   try {
-//     const giftIds = await Gifts.findAll({
-//       where: { group_id: groupId },
-//       attributes: ["gift_id"],
-//     });
-    
-//     const totalVote = await Votes.count({
-//         where: { gift_id: giftIds.map((gift) => gift.gift_id) },
-//     });
-//     return totalVote;
-//   } catch (error) {
-//     console.error("Error count vote:", error);
-//     throw error;
-//   }
-// };
 export const details = async ({ groupId }: Detailgroup) => {
   try {
     const detailGift = await Gifts.findAll({

@@ -5,3 +5,7 @@ export interface paymentInput{
     paymentMethod: string;
     confirmationStatus: boolean;
 }
+export interface updateBills{
+    userId: number;
+    billSplitId: number;
+}

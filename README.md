@@ -50,9 +50,8 @@
 ```json
 {
     "billSplitId": 1,
+    "userId": 1,
     "amount": 150000,
-    "paymentMethod": "example payment method",
-    "confirmationStatus": false 
 }
 ```
 ### Vote Gift

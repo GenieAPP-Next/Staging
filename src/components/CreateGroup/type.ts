@@ -36,4 +36,5 @@ export interface GroupCardProps {
   memberCount: number;
   eventDate: string;
   avatarColor: string;
+  onGroupClick: () => void;
 }
