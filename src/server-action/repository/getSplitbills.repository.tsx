@@ -56,7 +56,13 @@ export const getBill = async ({ groupId }: billsInput) => {
       },
       attributes: ["user_id"],
     });
-    const userId = findBillPayer?.get("user_id") as number;
+    const BillPayerId = findBillPayer?.get("user_id") as number;
+    const findNameBillPayer = await Users.findOne({
+      where:{
+        user_id: BillPayerId
+      },
+      attributes: ["username"]
+    })
     const findBillId = await BillSplits.findOne({
       where: {
         group_id: groupId,
@@ -71,7 +77,10 @@ export const getBill = async ({ groupId }: billsInput) => {
       attributes: ["total_amount", "status"],
     });
     const result = {
-      BillPayer: userId,
+      BillPayer: {
+        name: findNameBillPayer,
+        userId: BillPayerId
+      },
       Bill: Getbill,
     };
     return result;
