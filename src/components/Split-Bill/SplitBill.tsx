@@ -8,7 +8,7 @@ import GiftItemLogistics from "./gift-items-logistics";
 import SplitBillLogistics from "./split-bill-logistics";
 import SettleBill from "./settle-bill";
 import classes from "./scss/split-bill.module.scss";
-import { SplitBillData } from "./type";
+import { SplitBillData, Owner } from "./type";
 
 export default function SplitBill() {
   const [data, setData] = useState<SplitBillData | null>(null);
@@ -42,20 +42,20 @@ export default function SplitBill() {
     }
   }, [groupId, userId]);
 
-  // const defaultOwner: Owner = {
-  //   bill_split_id: 0,
-  //   bill_id: 0,
-  //   user_id: 0,
-  //   group_id: 0,
-  //   amount: "0.00",
-  //   status: "",
-  //   createdAt: "",
-  //   updatedAt: "",
-  //   user: { username: "Unknown" },
-  //   name: "Unknown",
-  // };
+  const defaultOwner: Owner = {
+    bill_split_id: 0,
+    bill_id: 0,
+    user_id: 0,
+    group_id: 0,
+    amount: "0.00",
+    status: "",
+    createdAt: "",
+    updatedAt: "",
+    user: { username: "Unknown" },
+    name: "Unknown",
+  };
 
-  // const owner = data?.SplitBills?.owner ?? defaultOwner;
+  const owner = data?.SplitBills?.owner ?? defaultOwner;
   const members = data?.SplitBills?.members ?? [];
 
   const originalAmountDue = data?.Bill?.Bill?.total_amount
@@ -94,7 +94,7 @@ export default function SplitBill() {
           )}
           {members && (
             <SplitBillLogistics
-              // owner={owner}
+              owner={owner}
               members={members}
               originalAmountDue={originalAmountDue}
             />
