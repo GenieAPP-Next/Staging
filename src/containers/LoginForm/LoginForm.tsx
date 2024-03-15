@@ -136,7 +136,7 @@ function LoginForm() {
             <Image src={logo} alt="logo" width={167} height={94} />
           </Box>
           <Typography
-            sx={{ padding: "20px", width: "320px", fontWeight: "500" }}
+            sx={{ padding: "20px" }}
             variant="h5"
             color="textPrimary"
             gutterBottom
