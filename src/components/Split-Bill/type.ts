@@ -17,6 +17,23 @@ export interface Bill {
   };
 }
 
+export interface User {
+  username: string;
+}
+
+export interface Owner {
+  bill_split_id: number;
+  bill_id: number;
+  user_id: number;
+  group_id: number;
+  amount: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User;
+  name: string;
+}
+
 export interface Member {
   name: string;
   bill_split_id: number;
@@ -27,10 +44,11 @@ export interface Member {
   status: string;
   createdAt: string;
   updatedAt: string;
+  user: User;
 }
 
 export interface SplitBills {
-  owner: Member;
+  owner: Owner;
   members: Member[];
 }
 
