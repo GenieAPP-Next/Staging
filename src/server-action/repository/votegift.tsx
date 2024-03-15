@@ -7,6 +7,7 @@ import {
   Membergroup,
   Detailgroup,
   checkvotebyuserId,
+  checkvote,
 } from "../types/voteGift.types";
 export const voteGift = async ({ userId, giftId }: voteInput) => {
   try {
@@ -57,11 +58,25 @@ export const detailMember = async ({ giftId }: checkvotebyuserId) => {
   try {
     const member = await Votes.findAll({
       where: { gift_id: giftId },
-      attributes: ["user_id"]
+      attributes: ["user_id"],
     });
     return member;
   } catch (error) {
     console.error("Error count member:", error);
+    throw error;
+  }
+};
+export const checkVote = async ({ giftId, userId }: checkvote) => {
+  try{
+    const Check = await Votes.findOne({
+      where:{
+        gift_id: giftId,
+        user_Id: userId
+      }
+    })
+    return Check;
+  } catch (error) {
+    console.error("Error Checking Vote:", error);
     throw error;
   }
 };
