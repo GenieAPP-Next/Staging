@@ -2,6 +2,7 @@ import Gifts from "@/models/Gifts.model";
 import Categories from "@/models/Categories.model";
 import Users from "@/models/Users.model";
 import ErrorHandler from "../utils/ErrorHandler";
+import { Model } from "sequelize";
 
 export const getItemsByCategory = async (categoryId: number) => {
   try {
@@ -18,27 +19,37 @@ export const getItemsByCategory = async (categoryId: number) => {
       where: {
         category_id: categoryId,
       },
-      include: [
-        {
-          model: Users,
-          attributes: ["username"],
-          required: true,
-        },
-      ],
       attributes: [
-        "user_id",
-        "gift_id",
         "name",
+        "gift_id",
         "price",
         "image_url",
         "url_link",
         "category_id",
         "createdAt",
         "updatedAt",
+        "user_id",
+      ],
+      include: [
+        {
+          model: Users,
+          attributes: ["username"],
+        },
       ],
     });
 
-    return items;
+    const uniqueItems = [];
+    const seenNames = new Set();
+
+    for (const item of items as (Model<any> & any)[]) {
+      const name = item.name;
+      if (!seenNames.has(name)) {
+        uniqueItems.push(item);
+        seenNames.add(name);
+      }
+    }
+
+    return uniqueItems;
   } catch (err) {
     console.error("Error finding items by category:", err);
     throw err;
