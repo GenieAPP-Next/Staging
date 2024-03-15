@@ -7,11 +7,13 @@ export const Createbill = async ({ giftId, groupId }: createBill) => {
     try{
         const findPriceandGiftId = await Gifts.findOne({
             where:{
-                group_id: groupId
+                group_id: groupId,
+                gift_id: giftId
             },
             attributes: ["price"]
         })
         const totalAmountGift = findPriceandGiftId?.getDataValue("price") as number;
+        console.log(totalAmountGift)
         // const giftId = findPriceandGiftId?.getDataValue("gift_id") as number;
         const status = 'Pending / Awaiting Payment'
       const createBill = await Bills.create({
