@@ -15,3 +15,7 @@ export interface getGiftfromrecommendation {
   categoryId: number;
   giftId: number;
 }
+export interface checkingGift{
+  groupId: number;
+  userId: number;
+}
