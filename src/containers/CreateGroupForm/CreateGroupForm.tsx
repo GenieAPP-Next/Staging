@@ -116,7 +116,7 @@ const CreateGroupForm: React.FC = () => {
         return;
       }
 
-      // At this point, group is created successfully. Store the group_id in localStorage
+      // store the group_id in localStorage
       localStorage.setItem("group_id", groupId);
 
       // Proceed to the member addition page

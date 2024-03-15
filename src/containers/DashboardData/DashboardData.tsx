@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import axios from "axios";
 import AddButton from "@/components/Button/AddButton/AddButton";
@@ -32,6 +33,17 @@ interface GroupsData {
 const DashboardData = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  const handleGroupClick = (group: Group) => {
+    // Update local storage
+    localStorage.setItem("createGroupName", group.name);
+    localStorage.setItem("createGroupCategory", group.category);
+    localStorage.setItem("group_id", group.group_id.toString());
+
+    // Navigate to the group page
+    router.push(`/${group.name}/gift`);
+  };
 
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
@@ -75,6 +87,9 @@ const DashboardData = () => {
         avatarColor={
           avatarColors[getColorIndex(group.name, avatarColors.length)]
         }
+        onGroupClick={() => {
+          handleGroupClick(group);
+        }}
       />
     ));
 

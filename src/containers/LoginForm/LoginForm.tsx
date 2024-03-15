@@ -77,8 +77,10 @@ function LoginForm() {
 
       if (response.status === 200 && response.data.success) {
         const userId = response.data.data.user_id;
+        const userName = response.data.data.username;
 
-        localStorage.setItem("user_id", userId.toString());
+        localStorage.setItem("user_id", userId);
+        localStorage.setItem("username", userName);
 
         void Swal.fire(
           "Login success",
@@ -134,7 +136,7 @@ function LoginForm() {
             <Image src={logo} alt="logo" width={167} height={94} />
           </Box>
           <Typography
-            sx={{ padding: "20px" }}
+            sx={{ padding: "20px", width: "320px", fontWeight: "500" }}
             variant="h5"
             color="textPrimary"
             gutterBottom
