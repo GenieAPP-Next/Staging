@@ -3,7 +3,7 @@ import { createBill } from "../types/createBill.type";
 import ErrorHandler from "../utils/ErrorHandler";
 const Createbill = async ({ giftId, groupId }: createBill) => {
   try {
-    const create = await Bill({ groupId, giftId });
+    const create = await Bill({ giftId, groupId });
     return {
       status: 200,
       message: "Successfuly Create Bill",

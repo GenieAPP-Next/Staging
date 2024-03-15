@@ -4,7 +4,7 @@ import sequelize from "@/server-action/middlewares/dbConnection";
 
 import BillSplits from "./BillSplits.model";
 
-const Payments = sequelize.define("payments", {
+const Payments = sequelize.define("bill_splits", {
   payment_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

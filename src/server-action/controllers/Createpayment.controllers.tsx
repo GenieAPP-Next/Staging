@@ -1,4 +1,3 @@
-import { updateBills as BillUpdate } from "../repository/updateBills.repository";
 import { Payments } from "../services/Payment.service";
 // import { paymentInput } from "../types/payment.types";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,10 +6,13 @@ export const Createpayment = async (req: NextRequest, res: NextResponse) => {
   if (req.method === "POST") {
     try {
       const body = await req.json();
-      const { billSplitId, userId, amount } = body;
-      const paymentMethod = "Credit Card";
-      const paymentDate: Date = new Date();
-      const confirmationStatus = true;
+      const {
+        billSplitId,
+        amount,
+        paymentMethod,
+        confirmationStatus,
+      } = body;
+      const paymentDate: Date =  new Date();
       const paymentSplitBill = await Payments({
         billSplitId,
         paymentDate,
@@ -18,15 +20,11 @@ export const Createpayment = async (req: NextRequest, res: NextResponse) => {
         paymentMethod,
         confirmationStatus,
       });
-      const UpdateBills = await BillUpdate({ userId, billSplitId });
       return NextResponse.json(
         {
           success: true,
-          message: "Success Payment and update Bills",
-          data: {
-            create_payment: paymentSplitBill,
-            update_bills: UpdateBills
-          },
+          message: "Create Group successfully",
+          data: paymentSplitBill,
         },
         { status: 200 }
       );

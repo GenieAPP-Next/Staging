@@ -54,21 +54,26 @@ export const getBill = async ({ groupId }: billsInput) => {
         group_id: groupId,
         role: "billPayer",
       },
-      attributes: ["user_id"],
+      include: [
+        {
+          model: Users,
+          attributes: ["username"],
+          as: "user",
+        },
+      ],
     });
-    const BillPayerId = findBillPayer?.get("user_id") as number;
-    const findNameBillPayer = await Users.findOne({
-      where:{
-        user_id: BillPayerId
-      },
-      attributes: ["username"]
-    })
+
+    const userId = findBillPayer?.get("user_id") as number;
+    const username = (findBillPayer?.get("user") as { username: string })
+      ?.username;
+
     const findBillId = await BillSplits.findOne({
       where: {
         group_id: groupId,
       },
       attributes: ["bill_id"],
     });
+
     const BillsId = findBillId?.getDataValue("bill_id") as number;
     const Getbill = await Bills.findOne({
       where: {
@@ -76,19 +81,20 @@ export const getBill = async ({ groupId }: billsInput) => {
       },
       attributes: ["total_amount", "status"],
     });
+
     const result = {
-      BillPayer: {
-        name: findNameBillPayer,
-        userId: BillPayerId
-      },
+      BillPayer: userId,
+      BillPayerName: username,
       Bill: Getbill,
     };
+
     return result;
   } catch (error) {
     console.error("Error get bill:", error);
     throw error;
   }
 };
+
 export const getSplitBillbyuserId = async ({
   groupId,
   userId,
@@ -101,8 +107,8 @@ export const getSplitBillbyuserId = async ({
       include: [
         {
           model: Users,
-          attributes: ['username'],
-          as: 'user',
+          attributes: ["username"],
+          as: "user",
         },
       ],
     });

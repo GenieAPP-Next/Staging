@@ -1,4 +1,3 @@
-
 import Groups from "@/models/Groups.model";
 import { inputGroupName } from "../types/findGroup.types";
 import ErrorHandler from "../utils/ErrorHandler";

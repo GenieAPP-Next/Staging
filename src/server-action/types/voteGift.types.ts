@@ -15,7 +15,3 @@ export interface Detailgroup{
 export interface checkvotebyuserId{
     giftId: number;
 }
-export interface checkvote{
-    giftId: number;
-    userId: number;
-}

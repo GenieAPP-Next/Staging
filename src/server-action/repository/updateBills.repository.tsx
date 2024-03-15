@@ -28,7 +28,7 @@ export const updateBills = async ({ userId, billSplitId }: Billsupdate) => {
     const totalAmount = findtotalAmount?.getDataValue("total_amount") as number;
     const balanceBills = totalAmount - PaymentAmount;
     const balanceSplitBill = amountSplitBill - PaymentAmount;
-    if (totalAmount < 0) {
+    if (totalAmount > 0) {
       const Status = "PAID";
       const updateSplitBill = await BillSplits.update(
         {
@@ -38,7 +38,7 @@ export const updateBills = async ({ userId, billSplitId }: Billsupdate) => {
         { where: { bill_split_id: billSplitId } }
       );
       const updateBills = await Bills.update(
-        { total_amount: balanceBills, status: Status },
+        { total_amount: balanceBills },
         { where: { bill_id: billId } }
       );
       const result = {

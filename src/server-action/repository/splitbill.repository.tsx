@@ -1,10 +1,10 @@
 import BillSplits from "@/models/BillSplits.model";
 import GroupMembers from "@/models/GroupMember.model";
 import Gifts from "@/models/Gifts.model";
-import { splitBill, postSplitBill, checkGift } from "../types/splitBill.type";
+import { splitBill, postSplitBill } from "../types/splitBill.type";
 import Bills from "@/models/Bills.model";
 
-const SplitBill = async ({ groupId, giftId }: splitBill) => {
+const SplitBill = async ({ groupId }: splitBill) => {
   try {
     const member = await GroupMembers.count({
       where: { group_id: groupId },
@@ -12,13 +12,12 @@ const SplitBill = async ({ groupId, giftId }: splitBill) => {
     const priceGift = await Gifts.findOne({
       where: {
         group_id: groupId,
-        gift_id: giftId,
       },
       attributes: ["price"],
     });
     const totalAmountGift = priceGift?.getDataValue("price") as number;
-    const splitBillAmount = totalAmountGift / member;
-    return Math.ceil(splitBillAmount);
+    const splitBillAmount = Math.floor(totalAmountGift / member);
+    return splitBillAmount;
   } catch (error) {
     console.error("Error splitting bill:", error);
     throw error;
@@ -49,7 +48,7 @@ export const PostSplitBill = async ({ giftId, groupId }: postSplitBill) => {
       const postBill = await BillSplits.create({
         bill_id: billId,
         user_id: user.get("user_id"),
-        amount: await SplitBill({ groupId, giftId }),
+        amount: await SplitBill({ groupId }),
         status,
         group_id: groupId,
       });
@@ -62,16 +61,6 @@ export const PostSplitBill = async ({ giftId, groupId }: postSplitBill) => {
     return postBillResults;
   } catch (error) {
     console.error("Error posting split bill:", error);
-    throw error;
-  }
-};
-
-export const CheckGift = async ({ giftId }: checkGift) => {
-  try{
-    const check = await Gifts.findOne({ where: { gift_id: giftId } });
-    return check;
-  } catch (error) {
-    console.error("Error checking Gift:", error);
     throw error;
   }
 };

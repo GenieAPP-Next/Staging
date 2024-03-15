@@ -10,11 +10,11 @@ export const Createpayment = async ({
 }: paymentInput) => {
     try{
         const payment = await Payments.create({
-          bill_split_id: billSplitId,
-          payment_date: paymentDate,
+          billSplitId,
+          paymentDate,
           amount,
-          payment_method: paymentMethod,
-          confirmation_status: confirmationStatus,
+          paymentMethod,
+          confirmationStatus,
         });
         return payment;
     } catch(err){
