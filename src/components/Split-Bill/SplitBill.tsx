@@ -30,7 +30,15 @@ export default function SplitBill() {
           const response = await axios.get(
             `/api/getSplitBill/${groupId}/${userId}`
           );
-          setData(response.data.data.data);
+          const fetchedData = response.data.data.data;
+          setData(fetchedData);
+
+          // extract bill_split_id from owner
+          const billSplitId = fetchedData.SplitBills.owner.bill_split_id;
+          if (billSplitId) {
+            localStorage.setItem("bill_split_id", billSplitId.toString());
+            console.log("Saved bill_split_id from owner:", billSplitId);
+          }
         } catch (error) {
           console.error("Error fetching data: ", error);
         } finally {

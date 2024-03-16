@@ -116,10 +116,19 @@ const CreateGroupForm: React.FC = () => {
         return;
       }
 
-      // store the group_id in localStorage
       localStorage.setItem("group_id", groupId);
 
-      // Proceed to the member addition page
+      // send member data
+      for (const member of members) {
+        const role =
+          member.user_id === selectedBillPayerId ? "billPayer" : "member";
+        await axios.post("/api/addMember", {
+          groupId,
+          userId: member.user_id,
+          role,
+        });
+      }
+
       setSuccessSnackbarOpen(true);
       setTimeout(() => {
         router.push(`/${name}/gift`);
