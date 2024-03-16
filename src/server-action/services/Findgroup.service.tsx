@@ -13,6 +13,7 @@ export const Findgroup = async ({ userId }: inputFindGroup) => {
         message: "Please check userId. Error find all Group",
       });
     }
+    else{
     const groupIds = findGroup.map((group) => group.getDataValue("group_id"));
     const findDataGroupbygroupId = await Groups.findAll({
       where: { group_id: groupIds },
@@ -28,7 +29,7 @@ export const Findgroup = async ({ userId }: inputFindGroup) => {
 
     return {
       status: 200,
-      message: "Success find username",
+      message: "Success find group",
       data: {
         groups: {
           group: findDataGroupbygroupId,
@@ -36,6 +37,7 @@ export const Findgroup = async ({ userId }: inputFindGroup) => {
         },
       },
     };
+    }
   } catch (error: any) {
     throw new ErrorHandler({
       success: false,

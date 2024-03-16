@@ -16,7 +16,7 @@ export const Addmember = async (
       return NextResponse.json(
         {
           success: true,
-          message: "Success Finding username",
+          message: "Success Add username",
           data: addMemberGroup,
         },
         { status: 200 }
