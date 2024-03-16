@@ -1,74 +1,111 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Autocomplete } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import axios from "axios";
 import classes from "./scss/payment-form.module.scss";
 
 export default function PaymentForm() {
   const [amount, setAmount] = useState("");
-  const [image, setImage] = useState("");
-  const [toWho, setToWho] = useState("");
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  //   console.log(amount)
+  const [showModal, setShowModal] = useState(false);
+  const [paymentSuccessInfo, setPaymentSuccessInfo] = useState({
+    billSplitId: "",
+    amount: "",
+    username: "",
+  });
 
   useEffect(() => {
-    const isFormFilled = amount && image && toWho;
-    setIsSubmitDisabled(!isFormFilled);
-  }, [amount, image, toWho]);
+    setIsSubmitDisabled(!amount);
+  }, [amount]);
 
-  const memberList = [{ name: "Ucup" }, { name: "Ucok" }];
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const userId = localStorage.getItem("user_id");
+    const billSplitId = localStorage.getItem("bill_split_id");
+    const username = localStorage.getItem("username");
+
+    if (!userId || !billSplitId || !username) {
+      console.error("Missing information from localStorage");
+      return;
+    }
+
+    // Payload sesuai dengan kebutuhan backend
+    const payload = {
+      billSplitId: parseInt(billSplitId, 10),
+      payment_date: new Date().toISOString().split("T")[0],
+      amount: parseFloat(amount),
+      paymentMethod: "Credit Card", // Contoh, perlu disesuaikan dengan form/input pengguna
+      confirmationStatus: "Pending", // Contoh, perlu disesuaikan dengan form/input pengguna
+    };
+
+    // Log untuk debugging
+    console.log("Payload being sent:", payload);
+
+    try {
+      await axios.post("/api/createPayment", payload);
+      setPaymentSuccessInfo({ billSplitId, amount, username });
+      setShowModal(true); // Tampilkan modal
+    } catch (error) {
+      console.error("Error in creating payment:", error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <form className={classes.formContainer}>
-      <div className={classes.inputField}>
-        <TextField
-          id="amount"
-          label="Amount"
-          variant="outlined"
-          fullWidth
-          type="number"
-          value={amount}
-          onChange={(e) => {
-            setAmount(e.target.value);
-          }}
-        />
-        <TextField
-          id="image"
-          label="Image"
-          variant="outlined"
-          fullWidth
-          value={image}
-          onChange={(e) => {
-            setImage(e.target.value);
-          }}
-        />
-        <Autocomplete
-          freeSolo
-          id="to-who"
-          disableClearable
-          options={memberList.map((option) => option.name)}
-          value={toWho}
-          onChange={(_, newValue) => {
-            setToWho(newValue);
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="To"
-              InputProps={{
-                ...params.InputProps,
-                type: "text",
-              }}
-            />
-          )}
-        />
-      </div>
-      <div className={classes.btnContainer}>
-        <button disabled={isSubmitDisabled} style={{ backgroundColor: isSubmitDisabled ? "rgba(29, 27, 32, 0.12)" : "#4285f4", cursor: isSubmitDisabled ? "not-allowed" : "pointer" }}>
-          Submit
-        </button>
-      </div>
-    </form>
+    <>
+      <form className={classes.formContainer} onSubmit={handleSubmit}>
+        <div className={classes.inputField}>
+          <TextField
+            id="amount"
+            label="Amount"
+            variant="outlined"
+            fullWidth
+            type="number"
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+          />
+        </div>
+        <div className={classes.btnContainer}>
+          <button
+            type="submit"
+            disabled={isSubmitDisabled}
+            style={{
+              backgroundColor: isSubmitDisabled
+                ? "rgba(29, 27, 32, 0.12)"
+                : "#4285f4",
+              cursor: isSubmitDisabled ? "not-allowed" : "pointer",
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+
+      <Modal
+        open={showModal}
+        onClose={handleCloseModal}
+        aria-labelledby="payment-success-modal"
+        aria-describedby="shows-payment-success-information"
+      >
+        <Box className={classes.modalBox}>
+          <h2 id="payment-success-modal">Payment Successful</h2>
+          <p>Username: {paymentSuccessInfo.username}</p>
+          <p>Bill Split ID: {paymentSuccessInfo.billSplitId}</p>
+          <p>Amount: {paymentSuccessInfo.amount}</p>
+          <button onClick={handleCloseModal}>Close</button>
+        </Box>
+      </Modal>
+    </>
   );
 }
