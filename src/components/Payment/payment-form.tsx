@@ -35,22 +35,20 @@ export default function PaymentForm() {
       return;
     }
 
-    // Payload sesuai dengan kebutuhan backend
     const payload = {
       billSplitId: parseInt(billSplitId, 10),
       payment_date: new Date().toISOString().split("T")[0],
       amount: parseFloat(amount),
-      paymentMethod: "Credit Card", // Contoh, perlu disesuaikan dengan form/input pengguna
-      confirmationStatus: "Pending", // Contoh, perlu disesuaikan dengan form/input pengguna
+      paymentMethod: "Credit Card",
+      confirmationStatus: "Pending",
     };
 
-    // Log untuk debugging
     console.log("Payload being sent:", payload);
 
     try {
       await axios.post("/api/createPayment", payload);
       setPaymentSuccessInfo({ billSplitId, amount, username });
-      setShowModal(true); // Tampilkan modal
+      setShowModal(true); // modal
     } catch (error) {
       console.error("Error in creating payment:", error);
     }
@@ -98,7 +96,23 @@ export default function PaymentForm() {
         aria-labelledby="payment-success-modal"
         aria-describedby="shows-payment-success-information"
       >
-        <Box className={classes.modalBox}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: "16px",
+            borderRadius: "20px",
+          }}
+        >
           <h2 id="payment-success-modal">Payment Successful</h2>
           <p>Username: {paymentSuccessInfo.username}</p>
           <p>Bill Split ID: {paymentSuccessInfo.billSplitId}</p>
