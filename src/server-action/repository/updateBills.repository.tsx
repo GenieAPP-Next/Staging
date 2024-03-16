@@ -32,6 +32,7 @@ export const updateBills = async ({ userId, billSplitId }: Billsupdate) => {
     const updateSplitBill = await BillSplits.update(
       {
         amount: balanceBills,
+        status: "PAID",
       },
       { where: { bill_split_id: billSplitId, user_id: userId } }
     );
@@ -40,64 +41,54 @@ export const updateBills = async ({ userId, billSplitId }: Billsupdate) => {
       { where: { bill_id: billId } }
     );
     const checkbillAmount = await Bills.findOne({
-      where:{
-        bill_id: billId
+      where: {
+        bill_id: billId,
       },
-      attributes: ['total_amount']
-    })
+      attributes: ["total_amount"],
+    });
     const billAmount = checkbillAmount?.getDataValue("total_amount") as number;
-    const checkSplitbillAmount = await BillSplits.findOne({
-      where:{
-        bill_split_id: billSplitId,
-        user_id: userId,
-      },
-      attributes: ['amount']
-    })
-    const SplitbillAmount = checkSplitbillAmount?.getDataValue("amount") as number;
-    if(SplitbillAmount === 0){
-      const Status = "PAID";
-      const updateStatusSplitBill = await BillSplits.update(
-        {
-          status: Status,
-        },
-        { where: { bill_split_id: billSplitId, user_id: userId } }
+    // const checkSplitbillAmount = await BillSplits.findOne({
+    //   where:{
+    //     bill_split_id: billSplitId,
+    //     user_id: userId,
+    //   },
+    //   attributes: ['amount']
+    // })
+    if (billAmount === 0) {
+      const statusbill = "PAID";
+      const updateStatusBills = await Bills.update(
+        { status: statusbill },
+        { where: { bill_id: billId } }
       );
-      if(billAmount === 0){
-        const Status = "PAID";
-        const updateStatusBills = await Bills.update(
-          { status: Status },
-          { where: { bill_id: billId } }
-        );
-        const result = {
-          split_bill: {
-            user_id: userId,
-            split_bill_id: updateSplitBill,
-            amount: balanceSplitBill,
-            status: updateStatusSplitBill,
-          },
-          bills: {
-            bill_id: updateBills,
-            total_amount: balanceBills,
-            status: updateStatusBills
-          },
-        }
-        return result;
-      }
       const result = {
         split_bill: {
           user_id: userId,
           split_bill_id: updateSplitBill,
           amount: balanceSplitBill,
-          status: updateStatusSplitBill,
+          status: "PAID",
         },
         bills: {
           bill_id: updateBills,
           total_amount: balanceBills,
-          status: 'Pending / Waiting Payment'
+          status: updateStatusBills || 'PAID',
         },
-      }
+      };
       return result;
     }
+    const result = {
+      split_bill: {
+        user_id: userId,
+        split_bill_id: updateSplitBill,
+        amount: balanceSplitBill,
+        status: "PAID",
+      },
+      bills: {
+        bill_id: updateBills,
+        total_amount: balanceBills,
+        status: "Pending Waiting Payment",
+      },
+    };
+    return result;
   } catch (error) {
     console.error("Error update Bills:", error);
     throw error;
