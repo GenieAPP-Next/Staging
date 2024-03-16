@@ -26,7 +26,7 @@ export const checkpayment = async ({
   billSplitId,
   confirmationStatus,
 }: checkPayment) => {
-  try{
+  try {
     const userpayment = await Payments.findOne({
       where: {
         bill_split_id: billSplitId,

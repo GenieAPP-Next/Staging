@@ -17,7 +17,7 @@ export const Createpayment = async (req: NextRequest, res: NextResponse) => {
         billSplitId,
         confirmationStatus,
       });
-      if(checkuserpayment){
+      if (checkuserpayment) {
         return NextResponse.json(
           {
             success: true,
@@ -25,7 +25,7 @@ export const Createpayment = async (req: NextRequest, res: NextResponse) => {
           },
           { status: 200 }
         );
-      }else{
+      } else {
         const paymentSplitBill = await Payments({
           billSplitId,
           paymentDate,
@@ -33,7 +33,10 @@ export const Createpayment = async (req: NextRequest, res: NextResponse) => {
           paymentMethod,
           confirmationStatus,
         });
-        const UpdateSplitbillandBills = await UpdateBills({ userId, billSplitId });
+        const UpdateSplitbillandBills = await UpdateBills({
+          userId,
+          billSplitId,
+        });
         return NextResponse.json(
           {
             success: true,
