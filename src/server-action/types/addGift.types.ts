@@ -6,5 +6,16 @@ export interface addGift {
   urlLink: string;
   userId: number;
   categoryId: number;
-  isRecommendation?: boolean;
+}
+export interface addGiftbyCategory {
+  categoryId: number;
+  giftId: number;
+}
+export interface getGiftfromrecommendation {
+  categoryId: number;
+  giftId: number;
+}
+export interface checkingGift{
+  groupId: number;
+  userId: number;
 }

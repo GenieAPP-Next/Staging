@@ -2,38 +2,12 @@ import { Addgift } from "../repository/addgift.repository";
 import { addGift } from "../types/addGift.types";
 import ErrorHandler from "../utils/ErrorHandler";
 
-const Creategift = async ({
-  groupId,
-  name,
-  price,
-  imageUrl,
-  urlLink,
-  userId,
-  categoryId,
-  isRecommendation,
-  recommendedGroupId,
-}: addGift & { isRecommendation?: boolean; recommendedGroupId?: number }) => {
+const Creategift = async ({ groupId, name, price, imageUrl, urlLink, userId, categoryId }: addGift) => {
   try {
-    // Menangani logika penambahan gift, termasuk rekomendasi, dalam satu fungsi Addgift
-    const createGift = await Addgift({
-      groupId,
-      name,
-      price,
-      imageUrl,
-      urlLink,
-      userId,
-      categoryId,
-      isRecommendation,
-    });
-
-    // Pesan sukses mungkin perlu disesuaikan berdasarkan apakah ini rekomendasi atau tidak
-    const message = isRecommendation
-      ? "Successfully added recommended gift to the group"
-      : "Successfully added gift to the group";
-
+    const createGift = await Addgift({ groupId, name, price, imageUrl, urlLink, userId, categoryId });
     return {
       status: 200,
-      message,
+      message: "Successfuly Create Group",
       data: createGift,
     };
   } catch (error: any) {
@@ -44,5 +18,4 @@ const Creategift = async ({
     });
   }
 };
-
 export { Creategift };

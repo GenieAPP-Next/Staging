@@ -1,47 +1,46 @@
 import { Creategift } from "../services/Creategift.service";
+import { checkGift } from "../repository/addgift.repository";
 import { NextRequest, NextResponse } from "next/server";
 
 export const Addgift = async (req: NextRequest, res: NextResponse) => {
   try {
-    const { giftItems } = await req.json();
-
-    // If the array is empty or not present, throw an error
-    if (!giftItems?.length) {
-      throw new Error("No gift items provided");
+    const body = await req.json();
+    const { groupId, name, price, imageUrl, urlLink, userId, categoryId } =
+      body;
+    const checkingGift = await checkGift({ groupId, userId });
+    if(checkingGift){
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User already Add gift. Please don't add gift again"
+        },
+        { status: 400 }
+      );
+    } else{
+      const createGift = await Creategift({
+        groupId,
+        name,
+        price,
+        imageUrl,
+        urlLink,
+        userId,
+        categoryId,
+      });
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Success add Gift",
+          data: createGift,
+        },
+        { status: 200 }
+      );
     }
-
-    // Process each gift item
-    const giftsCreationPromises = giftItems.map(
-      async (gift: any) =>
-        await Creategift({
-          groupId: gift.groupId,
-          name: gift.name,
-          price: gift.price,
-          imageUrl: gift.imageUrl,
-          urlLink: gift.urlLink,
-          userId: gift.userId,
-          categoryId: gift.categoryId,
-          isRecommendation: gift.isRecommendation,
-        })
-    );
-
-    // Wait for all gift creations to complete
-    const createdGifts = await Promise.all(giftsCreationPromises);
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Gifts successfully added",
-        data: createdGifts,
-      },
-      { status: 200 }
-    );
   } catch (err: any) {
-    console.error("Error adding gifts:", err);
+    console.error("Error Add gift:", err);
     return NextResponse.json(
       {
         success: false,
-        message: err.message || "An error occurred while adding gifts",
+        message: err.message,
       },
       { status: 400 }
     );

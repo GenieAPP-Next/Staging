@@ -7,7 +7,8 @@ export const Createbill = async ({ giftId, groupId }: createBill) => {
     try{
         const findPriceandGiftId = await Gifts.findOne({
             where:{
-                group_id: groupId
+                group_id: groupId,
+                gift_id: giftId
             },
             attributes: ["price"]
         })

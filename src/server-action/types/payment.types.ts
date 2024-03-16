@@ -9,3 +9,7 @@ export interface updateBills{
     userId: number;
     billSplitId: number;
 }
+export interface checkPayment{
+    billSplitId: number;
+    confirmationStatus: boolean
+}
